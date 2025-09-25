@@ -11,6 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('warehouse', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', '100');
+            $table->string('description', '255');
+            $table->string('location', '255');
+            $table->timestamps();
+        });
+
         Schema::create('category', function (Blueprint $table) {
             $table->id();
             $table->string('name', '100');
@@ -20,9 +28,10 @@ return new class extends Migration
 
         Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->integer('warehouse_id');
+            $table->integer('category_id');
             $table->string('name', '100');
             $table->string('sku', '100');
-            $table->integer('category_id');
             $table->integer('quantity');
             $table->integer('price');
             $table->integer('reorder_level');
@@ -31,6 +40,7 @@ return new class extends Migration
 
         Schema::create('transaction', function (Blueprint $table) {
             $table->id();
+            $table->integer('warehouse_id');
             $table->integer('user_id');
             $table->integer('item_id');
             $table->boolean('transaction_type');
