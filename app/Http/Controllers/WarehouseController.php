@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\Warehouse;
 
-class CategoryController extends Controller
+class WarehouseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categoryList = Category::all();
-        return view('inventory.category', compact('categoryList'));
+        $warehouseList = Warehouse::all();
+        return view('inventory.warehouse', compact('categoryList'));
     }
 
     /**
@@ -32,8 +32,8 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|min:3',
         ]);
-        Category::create($validated);
-        return redirect()->route('inventory.category')->with('success', 'Category berhasil ditambahkan');
+        Warehouse::create($validated);
+        return redirect()->route('inventory.warehouse')->with('success', 'Warehouse berhasil ditambahkan');
     }
 
     /**
@@ -49,9 +49,9 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $categoryList = Category::all();
-        $category = Category::findOrFail($id);
-        return view('inventory.category', compact('categoryList', 'category'));
+        $warehouseList = Warehouse::all();
+        $warehouse = Warehouse::findOrFail($id);
+        return view('inventory.warehouse', compact('warehouseList', 'warehouse'));
     }
 
     /**
@@ -59,11 +59,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validated = $request->validate([
-            'name' => 'required|min:3',
-        ]);
-        Category::where('id', $id)->update($validated);
-        return redirect()->route('inventory.category')->with('success', 'Category berhasil di edit');
+        //
     }
 
     /**
@@ -71,8 +67,13 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
-        return redirect()->route('inventory.category')->with('success', 'Category berhasil didelete');
+        $warehouse = Warehouse::findOrFail($id);
+
+        #Delete semua items
+        $warehouse->items()->delete();
+
+        #Delete warehouse
+        $warehouse->delete();
+        return redirect()->route('inventory.warehouse')->with('success', 'Warehouse berhasil didelete');
     }
 }

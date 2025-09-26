@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Items;
 
 class ItemsController extends Controller
 {
@@ -11,7 +12,8 @@ class ItemsController extends Controller
      */
     public function index()
     {
-        //
+        $itemsList = Items::all();
+        return view('inventory.items', compact('itemsList'));
     }
 
     /**
@@ -27,7 +29,15 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'warehouse_id' => 'required|min:1',
+            'category_id' => 'required|min:1',
+            'name' => 'required|min:3',
+            'sku' => 'required|min:3',
+            'quantity' => 'required|integer|min:0'
+        ]);
+        Items::create($validated);
+        return redirect()->route('inventory.items')->with('success', 'Items berhasil ditambahkan');
     }
 
     /**
@@ -43,7 +53,9 @@ class ItemsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $itemsList = Items::all();
+        $items = Items::findOrFail($id);
+        return view('inventory.items', compact('itemsList', 'items'));
     }
 
     /**
@@ -51,7 +63,15 @@ class ItemsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'warehouse_id' => 'required|min:1',
+            'category_id' => 'required|min:1',
+            'name' => 'required|min:3',
+            'sku' => 'required|min:3',
+            'quantity' => 'required|integer|min:0'
+        ]);
+        Items::where('id', $id)->update($validated);
+        return redirect()->route('inventory.items')->with('success', 'Items berhasil di edit');
     }
 
     /**
@@ -59,6 +79,8 @@ class ItemsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $items = Items::findOrFail($id);
+        $items->delete();
+        return redirect()->route('inventory.items')->with('success', 'Items berhasil didelete');
     }
 }
