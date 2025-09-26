@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #e9ebf3; /* light purple-gray background */
+      background-color: #e9ebf3;
       font-family: 'Inter', sans-serif;
     }
     .sidebar {
@@ -65,30 +65,29 @@
   <div class="sidebar">
     <h4 class="mb-4">Inventory</h4>
     <h6>Menu</h6>
-    <a href="#" class="active">📊 Dashboard</a>
-    <a href="#">🛒 Food Order</a>
-    <a href="#">📂 Manage Menu</a>
-    <a href="#">⭐ Customer Review</a>
+    <a href="#" class="active">Dashboard</a>
+    <a href="#">Supply</a>
+    <a href="#">Items</a>
+    <a href="#">Transaction</a>
 
     <h6>Others</h6>
-    <a href="#">⚙ Settings</a>
-    <a href="#">💳 Payment</a>
-    <a href="#">👤 Accounts</a>
-    <a href="#">❓ Help</a>
+    <a href="#">Settings</a>
+    <a href="#">Accounts</a>
+    <a href="#">Help</a>
   </div>
 
   <!-- Main Content -->
   <div class="flex-grow-1">
-    <!-- Navbar -->
-    <nav class="navbar d-flex justify-content-between align-items-center">
-      <form class="d-flex w-50">
-        <input class="form-control" type="search" placeholder="Search...">
-      </form>
-      <div>
-        <span class="me-3">🍔 Delicious Burger</span>
-        <button class="btn btn-light">🔔</button>
-      </div>
-    </nav>
+<!-- Navbar -->
+<nav class="navbar d-flex justify-content-between align-items-center">
+  <div>
+  </div>
+  <div>
+    <span class="me-3"></span>
+    <button class="btn btn-light">🔔</button>
+  </div>
+</nav>
+
 
     <!-- Dashboard Content -->
     <div class="container-fluid p-4">
