@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -11,7 +12,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categoryList = Category::all();
+        return view('inventory.items', compact('categoryList'));
     }
 
     /**
@@ -27,7 +29,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|min:3',
+        ]);
+        Category::create($validated);
+        return redirect()->route('inventory.items')->with('success', 'Category berhasil ditambahkan');
     }
 
     /**
@@ -43,7 +49,9 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $categoryList = Category::all();
+        $category = Category::findOrFail($id);
+        return view('inventory.items', compact('categoryList', 'category'));
     }
 
     /**
@@ -51,7 +59,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|min:3',
+        ]);
+        Category::where('id', $id)->update($validated);
+        return redirect()->route('inventory.items')->with('success', 'Category berhasil di edit');
     }
 
     /**
@@ -59,6 +71,8 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->delete();
+        return redirect()->route('inventory.items')->with('success', 'Category berhasil didelete');
     }
 }
