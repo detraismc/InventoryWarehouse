@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TransactionItem;
 use Illuminate\Http\Request;
-use App\Models\InvLog;
 
-class InvLogController extends Controller
+class TransactionItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $InvLogList = InvLog::all();
-        return view('inventory.InvLog', compact('InvLogList'));
+        $transactionItemList = TransactionItem::all();
+        return view('inventory.items', compact('transactionItemList'));
     }
 
     /**
@@ -30,21 +30,21 @@ class InvLogController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'warehouse_id' => 'required|min:1',
-            'user_id' => 'required|min:1',
+            'transaction_id' => 'required|min:1',
             'item_id' => 'required|min:1',
-            'InvLog_type' => 'required|in:IN,OUT',
+
             'quantity' => 'required|integer|min:1',
-            'date' => 'required|date|before_or_equal:today'
+            'revenue' => 'required|integer|min:0',
+            'cost' => 'required|integer|min:0'
         ]);
-        InvLog::create($validated);
-        return redirect()->route('inventory.InvLog')->with('success', 'InvLogs berhasil ditambahkan');
+        TransactionItem::create($validated);
+        return redirect()->route('inventory.items')->with('success', 'Transaction Item berhasil ditambahkan');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(TransactionItem $transactionItem)
     {
         //
     }
@@ -52,26 +52,23 @@ class InvLogController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(TransactionItem $transactionItem)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, TransactionItem $transactionItem)
     {
-        //
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(TransactionItem $transactionItem)
     {
-        $InvLog = InvLog::findOrFail($id);
-        $InvLog->delete();
-        return redirect()->route('inventory.InvLog')->with('success', 'InvLog berhasil didelete');
+        //
     }
 }

@@ -57,12 +57,13 @@
   <div class="sidebar">
     <h4 class="mb-4">Inventory</h4>
     <h6>Menu</h6>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="supply.html" class="active">Supply</a>
+    <a href="dashboard.html" class="active">Dashboard</a>
+    <a href="supply.html">Supply</a>
+    <a href="transaction.html">Transaction</a>
     <a href="warehouse.html">Warehouse</a>
     <a href="category.html">Category</a>
     <a href="items.html">Items</a>
-    <a href="transaction.html">Transaction</a>
+    <a href="transaction.html">Log</a>
 
     <h6>Others</h6>
     <a href="#">Accounts</a>

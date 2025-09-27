@@ -32,8 +32,11 @@ class ItemsController extends Controller
         $validated = $request->validate([
             'warehouse_id' => 'required|min:1',
             'category_id' => 'required|min:1',
+
             'name' => 'required|min:3',
             'sku' => 'required|min:3',
+            'standard_supply_cost' => 'required|integer|min:0',
+            'standard_sell_price' => 'required|integer|min:0',
             'quantity' => 'required|integer|min:0'
         ]);
         Items::create($validated);
@@ -66,8 +69,11 @@ class ItemsController extends Controller
         $validated = $request->validate([
             'warehouse_id' => 'required|min:1',
             'category_id' => 'required|min:1',
+
             'name' => 'required|min:3',
             'sku' => 'required|min:3',
+            'standard_supply_cost' => 'required|integer|min:0',
+            'standard_sell_price' => 'required|integer|min:0',
             'quantity' => 'required|integer|min:0'
         ]);
         Items::where('id', $id)->update($validated);
