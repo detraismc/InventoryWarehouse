@@ -40,12 +40,30 @@ return new class extends Migration
         Schema::create('transaction', function (Blueprint $table) {
             $table->id();
             $table->integer('warehouse_id');
-            $table->integer('user_id');
-            $table->integer('item_id');
-            $table->boolean('transaction_type');
-            $table->integer('quantity');
-            $table->date('date');
+            $table->string('entity', '100');
+            $table->string('type', '50');
+            $table->string('stage', '50');
+            $table->integer('transport_fee');
             $table->string('notes', '255');
+            $table->timestamps();
+        });
+
+        Schema::create('transaction_item', function (Blueprint $table) {
+            $table->id();
+            $table->integer('transaction_id');
+            $table->integer('item_id');
+            $table->integer('quantity');
+            $table->integer('revenue');
+            $table->integer('cost');
+            $table->timestamps();
+        });
+
+        Schema::create('transaction_log', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->integer('transaction_id');
+            $table->string('transaction_stage', '50');
+            $table->date('date');
             $table->timestamps();
         });
     }

@@ -7,5 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Items extends Model
 {
     protected $table = 'items';
-    protected $fillable = ['warehouse_id', 'category_id', 'name', 'sku', 'quantity', 'reorder_level'];
+    protected $fillable = [
+        'warehouse_id',
+        'category_id',
+
+        'name',
+        'sku',
+        'standard_supply_cost',
+        'standard_sell_price',
+        'quantity',
+        'reorder_level'
+    ];
 }

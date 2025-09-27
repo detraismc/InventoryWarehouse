@@ -65,28 +65,21 @@
   <div class="sidebar">
     <h4 class="mb-4">Inventory</h4>
     <h6>Menu</h6>
-    <a href="#" class="active">Dashboard</a>
-    <a href="#">Supply</a>
-    <a href="#">Items</a>
-    <a href="#">Transaction</a>
+    <a href="{{ route('inventory.dashboard') }}" class="active">Dashboard</a>
+    <a href="{{ route('inventory.supply') }}">Supply</a>
+    <a href="{{ route('inventory.transaction') }}">Transaction</a>
+    <a href="{{ route('inventory.warehouse') }}">Warehouse</a>
+    <a href="{{ route('inventory.category') }}">Category</a>
+    <a href="{{ route('inventory.items') }}">Items</a>
+    <a href="{{ route('inventory.log') }}">Log</a>
 
     <h6>Others</h6>
-    <a href="#">Settings</a>
-    <a href="#">Accounts</a>
-    <a href="#">Help</a>
+    <a href="{{ route('inventory.account') }}">Account</a>
+    <a href="{{ route('inventory.help') }}">Help</a>
   </div>
 
   <!-- Main Content -->
   <div class="flex-grow-1">
-<!-- Navbar -->
-<nav class="navbar d-flex justify-content-between align-items-center">
-  <div>
-  </div>
-  <div>
-    <span class="me-3"></span>
-    <button class="btn btn-light">🔔</button>
-  </div>
-</nav>
 
 
     <!-- Dashboard Content -->
@@ -109,6 +102,7 @@
             <small class="text-success">↑ 2.1% vs last week</small>
           </div>
         </div>
+      </div>
 
       <div class="row g-4 mb-4">
         <div class="col-md-4">
@@ -118,3 +112,12 @@
             <small class="text-success">↑ 2.1% vs last week</small>
           </div>
         </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

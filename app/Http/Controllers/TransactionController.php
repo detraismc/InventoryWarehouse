@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Transaction;
+use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
@@ -12,8 +12,9 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transactionList = Transaction::all();
-        return view('inventory.transaction', compact('transactionList'));
+        $TransactionList = Transaction::all();
+
+        return view('inventory.transaction', compact('TransactionList'));
     }
 
     /**
@@ -31,14 +32,15 @@ class TransactionController extends Controller
     {
         $validated = $request->validate([
             'warehouse_id' => 'required|min:1',
-            'user_id' => 'required|min:1',
-            'item_id' => 'required|min:1',
-            'transaction_type' => 'required|in:IN,OUT',
-            'quantity' => 'required|integer|min:1',
-            'date' => 'required|date|before_or_equal:today'
+
+            'entity' => 'required|min:3',
+            'type' => 'required|in:BUY,SELL,TRANSPORT',
+            'stage' => 'required|in:PACKAGING,SHIPMENT,COMPLETED',
+            'transport_fee' => 'required|integer|min:1'
         ]);
         Transaction::create($validated);
-        return redirect()->route('inventory.transaction')->with('success', 'Logs berhasil ditambahkan');
+
+        return redirect()->route('inventory.transaction')->with('success', 'Transactions berhasil ditambahkan');
     }
 
     /**
@@ -62,7 +64,16 @@ class TransactionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'warehouse_id' => 'required|min:1',
+
+            'entity' => 'required|min:3',
+            'type' => 'required|in:BUY,SELL,TRANSPORT',
+            'stage' => 'required|in:PACKAGING,SHIPMENT,COMPLETED',
+            'transport_fee' => 'required|integer|min:1'
+        ]);
+        Transaction::where('id', $id)->update($validated);
+        return redirect()->route('inventory.transaction')->with('success', 'Transaction berhasil di edit');
     }
 
     /**
@@ -71,6 +82,14 @@ class TransactionController extends Controller
     public function destroy(string $id)
     {
         $transaction = Transaction::findOrFail($id);
+
+        #Delete semua transaction item
+        $transaction->transaction_item()->delete();
+
+        #Delete semua transaction log
+        $transaction->transaction_log()->delete();
+
+        #Delete warehouse
         $transaction->delete();
         return redirect()->route('inventory.transaction')->with('success', 'Transaction berhasil didelete');
     }

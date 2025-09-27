@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Warehouse;
+use App\Models\TransactionLog;
 
-class WarehouseController extends Controller
+class TransactionLogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $warehouseList = Warehouse::all();
-        return view('inventory.warehouse', compact('warehouseList'));
+        $TransactionLogList = TransactionLog::all();
+
+        return view('inventory.log', compact('TransactionLogList'));
     }
 
     /**
@@ -30,10 +31,16 @@ class WarehouseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|min:3',
+            'warehouse_id' => 'required|min:1',
+            'user_id' => 'required|min:1',
+            'item_id' => 'required|min:1',
+            'TransactionLog_type' => 'required|in:IN,OUT',
+            'quantity' => 'required|integer|min:1',
+            'date' => 'required|date|before_or_equal:today',
         ]);
-        Warehouse::create($validated);
-        return redirect()->route('inventory.warehouse')->with('success', 'Warehouse berhasil ditambahkan');
+        TransactionLog::create($validated);
+
+        return redirect()->route('inventory.log')->with('success', 'TransactionLogs berhasil ditambahkan');
     }
 
     /**
@@ -49,9 +56,7 @@ class WarehouseController extends Controller
      */
     public function edit(string $id)
     {
-        $warehouseList = Warehouse::all();
-        $warehouse = Warehouse::findOrFail($id);
-        return view('inventory.warehouse', compact('warehouseList', 'warehouse'));
+        //
     }
 
     /**
@@ -67,13 +72,9 @@ class WarehouseController extends Controller
      */
     public function destroy(string $id)
     {
-        $warehouse = Warehouse::findOrFail($id);
+        $TransactionLog = TransactionLog::findOrFail($id);
+        $TransactionLog->delete();
 
-        #Delete semua items
-        $warehouse->items()->delete();
-
-        #Delete warehouse
-        $warehouse->delete();
-        return redirect()->route('inventory.warehouse')->with('success', 'Warehouse berhasil didelete');
+        return redirect()->route('inventory.log')->with('success', 'TransactionLog berhasil didelete');
     }
 }
