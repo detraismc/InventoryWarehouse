@@ -71,10 +71,10 @@
     <a href="{{ route('inventory.warehouse') }}">Warehouse</a>
     <a href="{{ route('inventory.category') }}">Category</a>
     <a href="{{ route('inventory.items') }}">Items</a>
-    <a href="{{ route('inventory.log') }}" class="active">Log</a>
+    <a href="{{ route('inventory.log') }}">Log</a>
 
     <h6>Others</h6>
-    <a href="{{ route('inventory.account') }}">Account</a>
+    <a href="{{ route('inventory.account') }}" class="active">Account</a>
     <a href="{{ route('inventory.help') }}">Help</a>
   </div>
 
@@ -84,7 +84,7 @@
 
     <!-- Dashboard Content -->
     <div class="container-fluid p-4">
-      <h5 class="mb-4">Logs</h5>
+      <h5 class="mb-4">Account</h5>
 
 
 

@@ -13,7 +13,7 @@ class TransactionItemController extends Controller
     public function index()
     {
         $transactionItemList = TransactionItem::all();
-        return view('inventory.items', compact('transactionItemList'));
+        return view('inventory.transaction', compact('transactionItemList'));
     }
 
     /**

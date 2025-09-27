@@ -57,17 +57,17 @@
   <div class="sidebar">
     <h4 class="mb-4">Inventory</h4>
     <h6>Menu</h6>
-    <a href="dashboard.html" class="active">Dashboard</a>
-    <a href="supply.html">Supply</a>
-    <a href="transaction.html">Transaction</a>
-    <a href="warehouse.html">Warehouse</a>
-    <a href="category.html">Category</a>
-    <a href="items.html">Items</a>
-    <a href="transaction.html">Log</a>
+    <a href="{{ route('inventory.dashboard') }}">Dashboard</a>
+    <a href="{{ route('inventory.supply') }}" class="active">Supply</a>
+    <a href="{{ route('inventory.transaction') }}">Transaction</a>
+    <a href="{{ route('inventory.warehouse') }}">Warehouse</a>
+    <a href="{{ route('inventory.category') }}">Category</a>
+    <a href="{{ route('inventory.items') }}">Items</a>
+    <a href="{{ route('inventory.log') }}">Log</a>
 
     <h6>Others</h6>
-    <a href="#">Accounts</a>
-    <a href="#">Help</a>
+    <a href="{{ route('inventory.account') }}">Account</a>
+    <a href="{{ route('inventory.help') }}">Help</a>
   </div>
 
   <!-- Main Content -->
