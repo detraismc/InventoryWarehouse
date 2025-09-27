@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Transaction;
+use App\Models\InvLog;
 
-class TransactionController extends Controller
+class InvLogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $transactionList = Transaction::all();
-        return view('inventory.transaction', compact('transactionList'));
+        $InvLogList = InvLog::all();
+        return view('inventory.InvLog', compact('InvLogList'));
     }
 
     /**
@@ -33,12 +33,12 @@ class TransactionController extends Controller
             'warehouse_id' => 'required|min:1',
             'user_id' => 'required|min:1',
             'item_id' => 'required|min:1',
-            'transaction_type' => 'required|in:IN,OUT',
+            'InvLog_type' => 'required|in:IN,OUT',
             'quantity' => 'required|integer|min:1',
             'date' => 'required|date|before_or_equal:today'
         ]);
-        Transaction::create($validated);
-        return redirect()->route('inventory.transaction')->with('success', 'Logs berhasil ditambahkan');
+        InvLog::create($validated);
+        return redirect()->route('inventory.InvLog')->with('success', 'InvLogs berhasil ditambahkan');
     }
 
     /**
@@ -70,8 +70,8 @@ class TransactionController extends Controller
      */
     public function destroy(string $id)
     {
-        $transaction = Transaction::findOrFail($id);
-        $transaction->delete();
-        return redirect()->route('inventory.transaction')->with('success', 'Transaction berhasil didelete');
+        $InvLog = InvLog::findOrFail($id);
+        $InvLog->delete();
+        return redirect()->route('inventory.InvLog')->with('success', 'InvLog berhasil didelete');
     }
 }

@@ -65,28 +65,21 @@
   <div class="sidebar">
     <h4 class="mb-4">Inventory</h4>
     <h6>Menu</h6>
-    <a href="#" class="active">Dashboard</a>
-    <a href="#">Supply</a>
-    <a href="#">Items</a>
-    <a href="#">Transaction</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="supply.html" class="active">Supply</a>
+    <a href="warehouse.html">Warehouse</a>
+    <a href="category.html">Category</a>
+    <a href="items.html">Items</a>
+    <a href="transaction.html">Transaction</a>
+    <a href="transaction.html">Log</a>
 
     <h6>Others</h6>
-    <a href="#">Settings</a>
     <a href="#">Accounts</a>
     <a href="#">Help</a>
   </div>
 
   <!-- Main Content -->
   <div class="flex-grow-1">
-<!-- Navbar -->
-<nav class="navbar d-flex justify-content-between align-items-center">
-  <div>
-  </div>
-  <div>
-    <span class="me-3"></span>
-    <button class="btn btn-light">🔔</button>
-  </div>
-</nav>
 
 
     <!-- Dashboard Content -->
