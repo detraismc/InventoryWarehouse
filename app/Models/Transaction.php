@@ -17,12 +17,12 @@ class Transaction extends Model
         'notes'
     ];
 
-    public function transaction_item()
+    public function getTransactionItem()
     {
-        return $this->hasMany(Items::class, 'transaction_id');
+        return $this->hasMany(ItemData::class, 'transaction_id');
     }
 
-    public function transaction_log()
+    public function getTransactionLog()
     {
         return $this->hasMany(TransactionLog::class, 'transaction_id');
     }

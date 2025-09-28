@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Items;
+use App\Models\ItemData;
 
 class Warehouse extends Model
 {
@@ -11,14 +11,14 @@ class Warehouse extends Model
     protected $fillable = [
         'name',
         'description',
-        'location'
+        'address'
     ];
 
-    public function items()
+    public function getItemData()
     {
-        return $this->hasMany(Items::class, 'warehouse_id');
+        return $this->hasMany(ItemData::class, 'warehouse_id');
     }
-    public function transaction()
+    public function getTransaction()
     {
         return $this->hasMany(Transaction::class, 'warehouse_id');
     }

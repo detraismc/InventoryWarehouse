@@ -4,18 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Items extends Model
+class ItemData extends Model
 {
-    protected $table = 'items';
+    protected $table = 'item';
     protected $fillable = [
+        'item_id',
         'warehouse_id',
-        'category_id',
 
-        'name',
+        'quantity',
         'sku',
         'standard_supply_cost',
         'standard_sell_price',
-        'quantity',
         'reorder_level'
     ];
 }

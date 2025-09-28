@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Inventory')</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e9ebf3;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .sidebar {
+            width: 230px;
+            min-height: 100vh;
+            background: #f8f9fc;
+            padding: 20px;
+        }
+
+        .sidebar h6 {
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            color: #555;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+
+        .sidebar a.active,
+        .sidebar a:hover {
+            background: #eef2ff;
+            color: #4f46e5;
+            font-weight: 500;
+        }
+
+        .navbar {
+            background: #fff;
+            padding: 10px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+
+        /* Buttons */
+        .btn-custom {
+            border-radius: 8px;
+            font-size: 14px;
+            padding: 6px 14px;
+        }
+
+        .btn-add {
+            background-color: #4f46e5;
+            color: #fff;
+        }
+
+        .btn-add:hover {
+            background-color: #4338ca;
+            color: #fff;
+        }
+
+        .btn-edit {
+            background-color: #facc15;
+            color: #111;
+        }
+
+        .btn-edit:hover {
+            background-color: #eab308;
+            color: #111;
+        }
+
+        .btn-delete {
+            background-color: #f87171;
+            color: #fff;
+        }
+
+        .btn-delete:hover {
+            background-color: #ef4444;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="d-flex">
+        {{-- Sidebar --}}
+        @include('partials.sidebar')
+
+        {{-- Main Content --}}
+        <div class="flex-grow-1">
+
+            <div class="container-fluid p-4">
+                <h5 class="mb-4">@yield('title', 'Inventory')</h5>
+
+                @if (session('success'))
+                    <div class="alert alert-success alert dismissable fade-show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss='alert' aria-label="Close"></button>
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $item)
+                                <li>{{ $item }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                @yield('content')
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

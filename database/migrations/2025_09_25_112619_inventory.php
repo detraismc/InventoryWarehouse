@@ -15,25 +15,34 @@ return new class extends Migration
             $table->id();
             $table->string('name', '100');
             $table->string('description', '255');
-            $table->string('location', '255');
+            $table->string('address', '255');
             $table->timestamps();
         });
 
         Schema::create('category', function (Blueprint $table) {
             $table->id();
             $table->string('name', '100');
-            $table->string('description', '255');
+            $table->string('description', '255')->nullable()->default(null);
             $table->timestamps();
         });
 
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('item', function (Blueprint $table) {
             $table->id();
-            $table->integer('warehouse_id');
-            $table->integer('category_id');
             $table->string('name', '100');
+            $table->string('description', '255');
+            $table->integer('category_id');
+            $table->timestamps();
+        });
+
+        Schema::create('item_data', function (Blueprint $table) {
+            $table->id();
+            $table->integer('item_id');
+            $table->integer('warehouse_id');
+            $table->integer('quantity')->default(0);
             $table->string('sku', '100');
-            $table->integer('quantity');
-            $table->integer('reorder_level');
+            $table->integer('standard_supply_cost')->default(0);
+            $table->integer('standard_sell_price')->default(0);
+            $table->integer('reorder_level')->default(-1);
             $table->timestamps();
         });
 
@@ -43,8 +52,8 @@ return new class extends Migration
             $table->string('entity', '100');
             $table->string('type', '50');
             $table->string('stage', '50');
-            $table->integer('transport_fee');
-            $table->string('notes', '255');
+            $table->integer('transport_fee')->default(0);
+            $table->string('notes', '255')->nullable()->default(null);
             $table->timestamps();
         });
 
@@ -52,9 +61,9 @@ return new class extends Migration
             $table->id();
             $table->integer('transaction_id');
             $table->integer('item_id');
-            $table->integer('quantity');
-            $table->integer('revenue');
-            $table->integer('cost');
+            $table->integer('quantity')->default(0);
+            $table->integer('revenue')->default(0);
+            $table->integer('cost')->default(0);
             $table->timestamps();
         });
 

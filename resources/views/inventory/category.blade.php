@@ -1,162 +1,144 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #e9ebf3;
-      font-family: 'Inter', sans-serif;
-    }
-    .sidebar {
-      width: 230px;
-      min-height: 100vh;
-      background: #f8f9fc;
-      padding: 20px;
-    }
-    .sidebar h6 {
-      color: #999;
-      font-size: 12px;
-      margin-top: 20px;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-    }
-    .sidebar a {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      border-radius: 8px;
-      color: #555;
-      text-decoration: none;
-      margin-bottom: 5px;
-    }
-    .sidebar a.active, .sidebar a:hover {
-      background: #eef2ff;
-      color: #4f46e5;
-      font-weight: 500;
-    }
-    .navbar {
-      background: #fff;
-      padding: 10px 20px;
-      border-bottom: 1px solid #eee;
-    }
-    .card {
-      border: none;
-      border-radius: 15px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .btn-custom {
-      border-radius: 8px;
-      font-size: 14px;
-      padding: 6px 14px;
-    }
-    .btn-add {
-      background-color: #4f46e5;
-      color: #fff;
-    }
-    .btn-add:hover {
-      background-color: #4338ca;
-      color: #fff;
-    }
-    .btn-edit {
-      background-color: #facc15;
-      color: #111;
-    }
-    .btn-edit:hover {
-      background-color: #eab308;
-      color: #111;
-    }
-    .btn-delete {
-      background-color: #f87171;
-      color: #fff;
-    }
-    .btn-delete:hover {
-      background-color: #ef4444;
-      color: #fff;
-    }
-  </style>
-</head>
-<body>
+@extends('layouts.inventory')
 
-<div class="d-flex">
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h4 class="mb-4">Inventory</h4>
-    <h6>Menu</h6>
-    <a href="{{ route('inventory.dashboard') }}">Dashboard</a>
-    <a href="{{ route('inventory.supply') }}">Supply</a>
-    <a href="{{ route('inventory.transaction') }}">Transaction</a>
-    <a href="{{ route('inventory.warehouse') }}">Warehouse</a>
-    <a href="{{ route('inventory.category') }}" class="active">Category</a>
-    <a href="{{ route('inventory.items') }}">Items</a>
-    <a href="{{ route('inventory.log') }}">Log</a>
+@section('title', 'Category')
 
-    <h6>Others</h6>
-    <a href="{{ route('inventory.account') }}">Account</a>
-    <a href="{{ route('inventory.help') }}">Help</a>
-  </div>
+@section('content')
 
-  <!-- Main Content -->
-  <div class="flex-grow-1">
-
-    <!-- Dashboard Content -->
-    <div class="container-fluid p-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="mb-0">Category</h5>
-      </div>
-
-      <div class="card p-3">
+    <div class="card p-3">
         <div class="table-responsive">
-          <table class="table align-middle">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th class="text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Electronics</td>
-                <td>Alat alat elektronik</td>
-                <td class="text-center">
-                  <a href="#" class="btn btn-sm btn-custom btn-edit me-2">Edit</a>
-                  <a href="#" class="btn btn-sm btn-custom btn-delete">Delete</a>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Tools</td>
-                <td>Alat biasa</td>
-                <td class="text-center">
-                  <a href="#" class="btn btn-sm btn-custom btn-edit me-2">Edit</a>
-                  <a href="#" class="btn btn-sm btn-custom btn-delete">Delete</a>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Clothes</td>
-                <td>Baju, celana, dsb</td>
-                <td class="text-center">
-                  <a href="#" class="btn btn-sm btn-custom btn-edit me-2">Edit</a>
-                  <a href="#" class="btn btn-sm btn-custom btn-delete">Delete</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($categoryList as $category)
+                        <tr>
+                            <td>{{ $category->id }}</td>
+                            <td>{{ $category->name }}</td>
+                            <td>{{ $category->description }}</td>
+                            <td class="text-center">
+                                <a href="#" class="btn btn-sm btn-custom btn-edit me-2" data-bs-toggle="modal"
+                                    data-bs-target="#editCategoryModal" data-id="{{ $category->id }}"
+                                    data-name="{{ $category->name }}" data-description="{{ $category->description }}">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-      </div>
-      <div class="mt-4">
-        <a href="#" class="btn btn-custom btn-add">+ Add Category</a>
-      </div>
-
     </div>
-  </div>
-</div>
+    <div class="mt-4">
+        <a href="#" class="btn btn-custom btn-add" data-bs-toggle="modal" data-bs-target="#addCategoryModal">+ Add
+            Category</a>
+    </div>
 
-</body>
-</html>
+
+
+    <!-- Add Category Modal -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                <div class="modal-header" style="border-bottom: 1px solid #eee;">
+                    <h5 class="modal-title fw-semibold" id="addCategoryModalLabel">Add Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ route('inventory.category.create') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="CategoryName" class="form-label">Category Name</label>
+                            <input type="text" class="form-control" id="CategoryName" name="name"
+                                placeholder="Enter Category name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CategoryDescription" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="CategoryDescription" name="description"
+                                placeholder="Enter Description" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid #eee;">
+                        <button type="submit" class="btn btn-custom btn-add btn-sm">Create Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Edit Category Modal -->
+    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                <div class="modal-header" style="border-bottom: 1px solid #eee;">
+                    <h5 class="modal-title fw-semibold" id="editCategoryModalLabel">Edit Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Delete button -->
+                <form id="editCategoryForm" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="editCategoryName" class="form-label">Category Name</label>
+                            <input type="text" class="form-control" id="editCategoryName" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCategoryDescription" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="editCategoryDescription" name="description"
+                                placeholder="Enter Description">
+                        </div>
+                    </div>
+
+                </form>
+                <div class="modal-footer d-flex justify-content-between" style="border-top: 1px solid #eee;">
+                    <!-- Update button -->
+                    <form id="deleteForm" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-custom btn-delete">Delete</button>
+                    </form>
+                    <button type="submit" class="btn btn-custom btn-add btn-sm" form="editCategoryForm">Update
+                        Category</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var editModal = document.getElementById('editCategoryModal');
+            editModal.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget;
+
+                var id = button.getAttribute('data-id');
+                var name = button.getAttribute('data-name');
+                var description = button.getAttribute('data-description') || '';
+
+                // Fill fields
+                editModal.querySelector('#editCategoryName').value = name;
+                editModal.querySelector('#editCategoryDescription').value = description;
+
+                // Update form action
+                var form = document.getElementById('editCategoryForm');
+                form.action = "/category/" + id;
+
+                // Delete form action
+                var deleteForm = document.getElementById('deleteForm');
+                deleteForm.action = "/category/" + id;
+            });
+        });
+    </script>
+
+
+
+@endsection
