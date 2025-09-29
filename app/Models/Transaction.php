@@ -22,9 +22,5 @@ class Transaction extends Model
         return $this->hasMany(ItemData::class, 'transaction_id');
     }
 
-    public function getTransactionLog()
-    {
-        return $this->hasMany(TransactionLog::class, 'transaction_id');
-    }
 }
 

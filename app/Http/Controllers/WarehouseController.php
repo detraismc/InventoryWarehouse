@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Warehouse;
+use App\Models\UserLog;
 
 class WarehouseController extends Controller
 {
@@ -20,7 +21,16 @@ class WarehouseController extends Controller
             'description' => 'nullable|string|max:255',
             'address' => 'required|string|max:255'
         ]);
-        Warehouse::create($validated);
+        $warehouse = Warehouse::create($validated);
+
+        // Store log
+        UserLog::create([
+            'sender' => 'system',
+            'log_type' => 'OTHER',
+            'log'    => "Created warehouse: {$warehouse->name}",
+            'date'   => now()
+        ]);
+
         return redirect()->route('inventory.warehouse')->with('success', 'Warehouse berhasil ditambahkan');
     }
 
@@ -31,7 +41,19 @@ class WarehouseController extends Controller
             'description' => 'nullable|string|max:255',
             'address' => 'required|string|max:255'
         ]);
-        Warehouse::where('id', $id)->update($validated);
+        $warehouse = Warehouse::findOrFail($id);
+        $warehouseOldName = $warehouse->name;
+        $warehouse->update($validated);
+        $warehouseNewName = $warehouse->name;
+
+        // Store log
+        UserLog::create([
+            'sender' => 'system',
+            'log_type' => 'OTHER',
+            'log'    => "Updated warehouse: {$warehouseOldName} -> {$warehouseNewName}",
+            'date'   => now()
+        ]);
+
         return redirect()->route('inventory.warehouse')->with('success', 'Category berhasil di edit');
     }
 
@@ -40,10 +62,19 @@ class WarehouseController extends Controller
         $warehouse = Warehouse::findOrFail($id);
 
         #Delete semua items
-        $warehouse->itemData()->delete();
+        #$warehouse->getItemData()->delete();
 
         #Delete warehouse
         $warehouse->delete();
+
+        // Store log
+        UserLog::create([
+            'sender' => 'system',
+            'log_type' => 'OTHER',
+            'log'    => "Deleted warehouse: {$warehouse->name}",
+            'date'   => now()
+        ]);
+
         return redirect()->route('inventory.warehouse')->with('success', 'Warehouse berhasil didelete');
     }
 }

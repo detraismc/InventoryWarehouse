@@ -11,16 +11,29 @@
     <a href="{{ route('inventory.transaction') }}"
         class="{{ request()->routeIs('inventory.transaction') ? 'active' : '' }}">Transaction</a>
 
-    <a href="{{ route('inventory.warehouse') }}"
-        class="{{ request()->routeIs('inventory.warehouse') ? 'active' : '' }}">Warehouse</a>
 
-    <a href="{{ route('inventory.category') }}"
-        class="{{ request()->routeIs('inventory.category') ? 'active' : '' }}">Category</a>
+    @if (in_array(Auth::user()->role, ['admin', 'manager']))
+        <a href="{{ route('inventory.log') }}" class="{{ request()->routeIs('inventory.log') ? 'active' : '' }}">Log</a>
+    @endif
 
-    <a href="{{ route('inventory.item') }}"
-        class="{{ request()->routeIs('inventory.item') ? 'active' : '' }}">Item</a>
 
-    <a href="{{ route('inventory.log') }}" class="{{ request()->routeIs('inventory.log') ? 'active' : '' }}">Log</a>
+    @if (in_array(Auth::user()->role, ['admin', 'manager']))
+        <h6>Setup</h6>
+        <a href="{{ route('inventory.warehouse') }}"
+            class="{{ request()->routeIs('inventory.warehouse') ? 'active' : '' }}">Warehouse</a>
+
+        <a href="{{ route('inventory.category') }}"
+            class="{{ request()->routeIs('inventory.category') ? 'active' : '' }}">Category</a>
+
+        <a href="{{ route('inventory.item') }}"
+            class="{{ request()->routeIs('inventory.item') ? 'active' : '' }}">Item</a>
+    @endif
+
+
+    @if (Auth::user()->role === 'admin')
+        <a href="{{ route('inventory.user') }}"
+            class="{{ request()->routeIs('inventory.user') ? 'active' : '' }}">User</a>
+    @endif
 
     <h6>Others</h6>
     <a href="{{ route('inventory.account') }}"

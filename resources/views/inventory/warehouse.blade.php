@@ -20,7 +20,7 @@
                 <tbody>
                     @foreach ($warehouseList as $warehouse)
                         <tr>
-                            <td>{{ $warehouse->id }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $warehouse->name }}</td>
                             <td>{{ $warehouse->description }}</td>
                             <td>{{ $warehouse->address }}</td>

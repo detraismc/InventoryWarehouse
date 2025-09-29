@@ -67,12 +67,11 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('transaction_log', function (Blueprint $table) {
+        Schema::create('user_log', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('transaction_id');
-            $table->string('transaction_stage', '50');
-            $table->date('date');
+            $table->string('sender', '50');
+            $table->string('log_type', '50');
+            $table->string('log', '255');
             $table->timestamps();
         });
     }
