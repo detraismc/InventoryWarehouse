@@ -58,7 +58,7 @@
         }
 
 
-        /* Buttons */
+
         .btn-custom {
             border-radius: 8px;
             font-size: 14px;
@@ -76,12 +76,22 @@
         }
 
         .btn-edit {
-            background-color: #facc15;
+            background-color: #ffda47;
             color: #111;
         }
 
         .btn-edit:hover {
-            background-color: #eab308;
+            background-color: #ecbb28;
+            color: #111;
+        }
+
+        .btn-edit-password {
+            background-color: #f8b271;
+            color: #111;
+        }
+
+        .btn-edit-password:hover {
+            background-color: #ef7d44;
             color: #111;
         }
 
@@ -95,12 +105,20 @@
             color: #fff;
         }
 
+
+
+        .form-control:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+        }
+
+
+
         .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
             background-color: #4f46e5;
             border-color: #6c757d;
             color: #fff;
         }
-
 
         .dataTables_wrapper .dataTables_paginate .page-link {
             color: #495057;
@@ -111,10 +129,9 @@
 <body>
 
     <div class="d-flex">
-        {{-- Sidebar --}}
         @include('partials.sidebar')
 
-        {{-- Main Content --}}
+
         <div class="flex-grow-1">
 
             <div class="container-fluid p-4">

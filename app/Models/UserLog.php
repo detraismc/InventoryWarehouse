@@ -10,7 +10,6 @@ class UserLog extends Model
     protected $fillable = [
         'sender',
         'log_type',
-        'log',
-        'date'
+        'log'
     ];
 }
