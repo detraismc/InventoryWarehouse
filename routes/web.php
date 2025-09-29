@@ -32,6 +32,9 @@ Route::put('/item/{id}', [ItemController::class, 'updateItem'])->name('inventory
 Route::delete('/item/{id}', [ItemController::class, 'destroyItem'])->name('inventory.item.delete');
 
 Route::get('/log', [LogController::class, 'index'])->name('inventory.log');
+Route::delete('/log/{id}', [LogController::class, 'destroy'])->name('inventory.log.delete');
+
+
 Route::get('/account', [AccountController::class, 'index'])->name('inventory.account');
 Route::get('/help', [HelpController::class, 'index'])->name('inventory.help');
 Route::get('/login', [LoginController::class, 'index'])->name('login');

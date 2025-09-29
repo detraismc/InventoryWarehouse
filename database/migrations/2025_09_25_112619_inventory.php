@@ -75,6 +75,15 @@ return new class extends Migration
             $table->date('date');
             $table->timestamps();
         });
+
+        Schema::create('user_log', function (Blueprint $table) {
+            $table->id();
+            $table->string('sender', '50');
+            $table->string('log_type', '50');
+            $table->string('log', '255');
+            $table->date('date');
+            $table->timestamps();
+        });
     }
 
     /**

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Inventory')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
     <style>
         body {
             background-color: #e9ebf3;
@@ -93,6 +94,17 @@
             background-color: #ef4444;
             color: #fff;
         }
+
+        .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
+            background-color: #4f46e5;
+            border-color: #6c757d;
+            color: #fff;
+        }
+
+
+        .dataTables_wrapper .dataTables_paginate .page-link {
+            color: #495057;
+        }
     </style>
 </head>
 
@@ -131,6 +143,10 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 </body>
 
 </html>
