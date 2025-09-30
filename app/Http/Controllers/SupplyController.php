@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ItemData;
+use App\Models\Item;
 use App\Models\Warehouse;
 
 class SupplyController extends Controller
@@ -23,11 +23,11 @@ class SupplyController extends Controller
     {
         $warehouseList = Warehouse::all();
 
-        // Only get items for this warehouse
-        $itemDataList = ItemData::with('item_data')
+        $itemDataList = Item::with('item')
             ->where('warehouse_id', $warehouse->id)
             ->get();
 
-        return view('inventory.supply', compact('warehouseList', 'itemDataList', 'warehouse'));
+        $itemList = Item::all();
+        return view('inventory.supply', compact('warehouseList', 'itemDataList', 'itemList', 'warehouse'));
     }
 }

@@ -38,9 +38,9 @@ Route::middleware(['auth', 'role:admin,manager'])->group(function () {
     Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('inventory.category.delete');
 
     Route::get('/item', [ItemController::class, 'index'])->name('inventory.item');
-    Route::post('/item', [ItemController::class, 'storeItem'])->name('inventory.item.create');
-    Route::put('/item/{id}', [ItemController::class, 'updateItem'])->name('inventory.item.edit');
-    Route::delete('/item/{id}', [ItemController::class, 'destroyItem'])->name('inventory.item.delete');
+    Route::post('/item', [ItemController::class, 'store'])->name('inventory.item.create');
+    Route::put('/item/{id}', [ItemController::class, 'update'])->name('inventory.item.edit');
+    Route::delete('/item/{id}', [ItemController::class, 'destroy'])->name('inventory.item.delete');
 
     Route::get('/log', [LogController::class, 'index'])->name('inventory.log');
     Route::delete('/log/{id}', [LogController::class, 'destroy'])->name('inventory.log.delete');

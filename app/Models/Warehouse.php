@@ -14,9 +14,9 @@ class Warehouse extends Model
         'address'
     ];
 
-    public function getItemData()
+    public function getItem()
     {
-        return $this->hasMany(ItemData::class, 'warehouse_id');
+        return $this->hasMany(Item::class, 'warehouse_id');
     }
     public function getTransaction()
     {

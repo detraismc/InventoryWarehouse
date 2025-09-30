@@ -179,10 +179,10 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
     <script>
@@ -208,6 +208,31 @@
                     orderable: false,
                     targets: 3
                 }]
+            });
+        });
+
+        function formatRupiah(value) {
+            return value.replace(/\D/g, "") // keep only numbers
+                .replace(/\B(?=(\d{3})+(?!\d))/g, "."); // add dot separator
+        }
+
+        function cleanRupiah(value) {
+            return value.replace(/\./g, ""); // remove dots for raw value
+        }
+
+        // Format live input
+        document.querySelectorAll('.rupiah-format').forEach(function(input) {
+            input.addEventListener('input', function() {
+                this.value = formatRupiah(this.value);
+            });
+        });
+
+        // Before form submit → clean values
+        document.querySelectorAll('form').forEach(function(form) {
+            form.addEventListener('submit', function() {
+                form.querySelectorAll('.rupiah-format').forEach(function(input) {
+                    input.value = cleanRupiah(input.value);
+                });
             });
         });
     </script>
