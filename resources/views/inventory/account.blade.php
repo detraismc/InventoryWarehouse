@@ -5,6 +5,7 @@
 @section('content')
     <div class="container py-1">
         <div class="row g-4">
+
             <!-- Edit Password Card -->
             <div class="col-md-4">
                 <div class="card p-3 shadow-sm h-100" style="border-radius: 16px;">
@@ -62,7 +63,7 @@
                 </div>
             </div>
 
-            <!-- Logout Card with User Info -->
+            <!-- User Info and Logout Card -->
             <div class="col-md-4">
                 <div class="card p-3 shadow-sm" style="border-radius: 16px;">
                     <div class="card-header bg-white fw-semibold">My Account</div>
@@ -84,8 +85,6 @@
                                 </span>
                             </div>
                         </div>
-
-
                         <form action="{{ route('logout') }}" method="POST" class="mt-auto">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-custom btn-delete mt-2">Logout</button>
@@ -93,6 +92,8 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
 @endsection

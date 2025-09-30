@@ -49,6 +49,8 @@ Route::middleware(['auth', 'role:admin,manager'])->group(function () {
 Route::middleware(['auth', 'role:admin,manager,user'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('inventory.dashboard');
     Route::get('/supply', [SupplyController::class, 'index'])->name('inventory.supply');
+    Route::get('/supply/{warehouse}', [SupplyController::class, 'show'])->name('inventory.supply.show');
+
     Route::get('/transaction', [TransactionController::class, 'index'])->name('inventory.transaction');
 
     Route::get('/account', [AccountController::class, 'index'])->name('inventory.account');

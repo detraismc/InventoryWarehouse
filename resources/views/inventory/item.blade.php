@@ -19,7 +19,7 @@
                 <tbody>
                     @foreach ($itemList as $item)
                         <tr>
-                            <td>{{ $item->id }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->description }}</td>
                             <td>{{ $item->category->name }}</td>
@@ -47,8 +47,8 @@
     <!-- Add Item Modal -->
     <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-                <div class="modal-header" style="border-bottom: 1px solid #eee;">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title fw-semibold" id="addItemModalLabel">Add Item</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -80,7 +80,7 @@
                         </div>
 
                     </div>
-                    <div class="modal-footer" style="border-top: 1px solid #eee;">
+                    <div class="modal-footer">
                         <button type="submit" class="btn btn-custom btn-add btn-sm">Create Item</button>
                     </div>
                 </form>
@@ -93,12 +93,11 @@
     <!-- Edit Item Modal -->
     <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-                <div class="modal-header" style="border-bottom: 1px solid #eee;">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title fw-semibold" id="editItemModalLabel">Edit Item</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <!-- Delete button -->
                 <form id="editItemForm" method="POST">
                     @csrf
                     @method('PUT')
@@ -129,8 +128,7 @@
                     </div>
 
                 </form>
-                <div class="modal-footer d-flex justify-content-between" style="border-top: 1px solid #eee;">
-                    <!-- Update button -->
+                <div class="modal-footer d-flex justify-content-between">
                     <form id="deleteForm" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')

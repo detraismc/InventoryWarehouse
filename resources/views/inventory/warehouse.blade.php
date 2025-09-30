@@ -51,8 +51,8 @@
     <div class="modal fade" id="addWarehouseModal" tabindex="-1" aria-labelledby="addWarehouseModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-                <div class="modal-header" style="border-bottom: 1px solid #eee;">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title fw-semibold" id="addWarehouseModalLabel">Add Warehouse</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -75,7 +75,7 @@
                                 placeholder="Enter Address" required>
                         </div>
                     </div>
-                    <div class="modal-footer" style="border-top: 1px solid #eee;">
+                    <div class="modal-footer">
                         <button type="submit" class="btn btn-custom btn-add btn-sm">Create Warehouse</button>
                     </div>
                 </form>
@@ -88,12 +88,11 @@
     <div class="modal fade" id="editWarehouseModal" tabindex="-1" aria-labelledby="editWarehouseModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-                <div class="modal-header" style="border-bottom: 1px solid #eee;">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title fw-semibold" id="editWarehouseModalLabel">Edit Warehouse</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <!-- Delete button -->
                 <form id="editWarehouseForm" method="POST">
                     @csrf
                     @method('PUT')
@@ -116,8 +115,7 @@
                     </div>
 
                 </form>
-                <div class="modal-footer d-flex justify-content-between" style="border-top: 1px solid #eee;">
-                    <!-- Delete button -->
+                <div class="modal-footer d-flex justify-content-between">
                     <form id="deleteForm" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')

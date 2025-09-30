@@ -6,7 +6,9 @@
         class="{{ request()->routeIs('inventory.dashboard') ? 'active' : '' }}">Dashboard</a>
 
     <a href="{{ route('inventory.supply') }}"
-        class="{{ request()->routeIs('inventory.supply') ? 'active' : '' }}">Supply</a>
+        class="{{ request()->routeIs('inventory.supply') || request()->routeIs('inventory.supply.show') ? 'active' : '' }}">
+        Supply
+    </a>
 
     <a href="{{ route('inventory.transaction') }}"
         class="{{ request()->routeIs('inventory.transaction') ? 'active' : '' }}">Transaction</a>

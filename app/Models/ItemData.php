@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ItemData extends Model
 {
-    protected $table = 'item';
+    protected $table = 'item_data';
     protected $fillable = [
         'item_id',
         'warehouse_id',
@@ -17,4 +17,9 @@ class ItemData extends Model
         'standard_sell_price',
         'reorder_level'
     ];
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'item_id');
+    }
 }

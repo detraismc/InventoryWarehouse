@@ -113,6 +113,27 @@
         }
 
 
+        .nav-tabs {
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .nav-tabs .nav-link {
+            color: #9c9bb9;
+            font-weight: 600;
+            border: none;
+            border-bottom: 3px solid transparent;
+            border-radius: 0;
+            padding: .75rem 1.25rem;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #4f46e5;
+            font-weight: 600;
+            border-bottom: 3px solid #4f46e5;
+            background: transparent;
+        }
+
+
 
         .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
             background-color: #4f46e5;
@@ -164,6 +185,32 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#logTable').DataTable({
+                pageLength: 10,
+                order: [
+                    [0, 'date']
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: 3
+                }]
+            });
+        });
+        $(document).ready(function() {
+            $('#supplyTable').DataTable({
+                pageLength: 10,
+                order: [
+                    [0, 'date']
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: 3
+                }]
+            });
+        });
+    </script>
 </body>
 
 </html>

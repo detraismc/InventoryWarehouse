@@ -5,71 +5,84 @@
 @section('content')
 
 
-      <!-- Top Summary Cards -->
-      <div class="row g-4 mb-4">
-        <div class="col-md-4">
-          <div class="card p-3">
-            <span class="stats-label">Total Suppliers</span>
-            <span class="stats-number">12</span>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-3">
-            <span class="stats-label">Pending Orders</span>
-            <span class="stats-number">5</span>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-3">
-            <span class="stats-label">Low Stock Alerts</span>
-            <span class="stats-number text-danger">3</span>
-          </div>
-        </div>
-      </div>
+    <div class="container py-4">
+        <div class="card">
+            <!-- Warehouse Tabs as Card Header -->
+            <div class="card-header border-0 pb-1.2">
+                <ul class="nav nav-tabs card-header-tabs">
+                    @foreach ($warehouseList as $w)
+                        <li class="nav-item">
+                            <a href="{{ route('inventory.supply.show', $w->id) }}"
+                                class="nav-link {{ isset($warehouse) && $warehouse->id == $w->id ? 'active' : '' }}">
+                                {{ $w->name }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
 
-      <!-- Supply Table -->
-      <div class="card p-3">
-        <h6 class="mb-3">Supplies List</h6>
-        <div class="table-responsive">
-          <table class="table align-middle">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Supplier Name</th>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Status</th>
-                <th>Expected Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>ABC Foods</td>
-                <td>Rice 25kg</td>
-                <td>50</td>
-                <td><span class="badge bg-success">Delivered</span></td>
-                <td>2025-09-20</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>FreshMart</td>
-                <td>Cooking Oil</td>
-                <td>30</td>
-                <td><span class="badge bg-warning text-dark">Pending</span></td>
-                <td>2025-09-28</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>FarmCo</td>
-                <td>Eggs (crate)</td>
-                <td>20</td>
-                <td><span class="badge bg-danger">Delayed</span></td>
-                <td>2025-09-25</td>
-              </tr>
-            </tbody>
-          </table>
+
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="card-body">
+
+                <h5 class="mb-1.5">Actions:</h5>
+
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    <!-- Add Supply -->
+                    <button class="btn btn-custom btn-add" data-bs-toggle="modal" data-bs-target="#addWarehouseModal">
+                        Add Supply
+                    </button>
+
+                    <!-- Sell Supply -->
+                    <button class="btn btn-custom btn-add" data-bs-toggle="modal" data-bs-target="#addWarehouseModal">
+                        Sell Supply
+                    </button>
+
+                    <!-- Transport Supply -->
+                    <button class="btn btn-custom btn-add" data-bs-toggle="modal" data-bs-target="#addWarehouseModal">
+                        Transport Supply
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="supplyTable" class="table table-striped table-bordered align-middle">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Reorder Level</th>
+                                <th class="text-center">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($itemDataList as $itemData)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $itemData->item->name }}</td>
+                                    <td>{{ $itemData->item->category }}</td>
+                                    <td>{{ $itemData->quantity }}</td>
+                                    <td>{{ $itemData->reorder_level }}</td>
+                                    <td class="text-center">
+                                        <form action="{{ route('inventory.log.delete', ['id' => $log->id]) }}"
+                                            id="deleteForm" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-custom btn-delete">X</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+            </div>
         </div>
-      </div>
+    </div>
 
 @endsection
