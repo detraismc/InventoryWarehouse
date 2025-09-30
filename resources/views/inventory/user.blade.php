@@ -52,8 +52,8 @@
     <!-- Add User Modal -->
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-                <div class="modal-header" style="border-bottom: 1px solid #eee;">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title fw-semibold" id="addUserModalLabel">Add User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -90,7 +90,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="modal-footer" style="border-top: 1px solid #eee;">
+                    <div class="modal-footer">
                         <button type="submit" class="btn btn-custom btn-add btn-sm">Create User</button>
                     </div>
                 </form>
@@ -103,12 +103,11 @@
     <!-- Edit User Modal -->
     <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-                <div class="modal-header" style="border-bottom: 1px solid #eee;">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title fw-semibold" id="editUserModalLabel">Edit User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <!-- Delete button -->
                 <form id="editUserForm" method="POST">
                     @csrf
                     @method('PUT')
@@ -136,8 +135,7 @@
                     </div>
 
                 </form>
-                <div class="modal-footer d-flex justify-content-between" style="border-top: 1px solid #eee;">
-                    <!-- Update button -->
+                <div class="modal-footer d-flex justify-content-between">
                     <form id="deleteForm" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')
@@ -157,12 +155,11 @@
     <div class="modal fade" id="editPasswordModal" tabindex="-1" aria-labelledby="editPasswordModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-                <div class="modal-header" style="border-bottom: 1px solid #eee;">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title fw-semibold" id="editPasswordModalLabel">Edit Password</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <!-- Delete button -->
                 <form id="editPasswordForm" method="POST">
                     @csrf
                     @method('PUT')
@@ -181,8 +178,7 @@
                     </div>
 
                 </form>
-                <div class="modal-footer d-flex justify-content-between" style="border-top: 1px solid #eee;">
-                    <!-- Update button -->
+                <div class="modal-footer d-flex justify-content-between">
                     <form id="deleteForm" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')

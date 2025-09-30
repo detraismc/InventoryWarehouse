@@ -38,9 +38,9 @@ Route::middleware(['auth', 'role:admin,manager'])->group(function () {
     Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('inventory.category.delete');
 
     Route::get('/item', [ItemController::class, 'index'])->name('inventory.item');
-    Route::post('/item', [ItemController::class, 'storeItem'])->name('inventory.item.create');
-    Route::put('/item/{id}', [ItemController::class, 'updateItem'])->name('inventory.item.edit');
-    Route::delete('/item/{id}', [ItemController::class, 'destroyItem'])->name('inventory.item.delete');
+    Route::post('/item', [ItemController::class, 'store'])->name('inventory.item.create');
+    Route::put('/item/{id}', [ItemController::class, 'update'])->name('inventory.item.edit');
+    Route::delete('/item/{id}', [ItemController::class, 'destroy'])->name('inventory.item.delete');
 
     Route::get('/log', [LogController::class, 'index'])->name('inventory.log');
     Route::delete('/log/{id}', [LogController::class, 'destroy'])->name('inventory.log.delete');
@@ -49,13 +49,14 @@ Route::middleware(['auth', 'role:admin,manager'])->group(function () {
 Route::middleware(['auth', 'role:admin,manager,user'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('inventory.dashboard');
     Route::get('/supply', [SupplyController::class, 'index'])->name('inventory.supply');
+    Route::get('/supply/{warehouse}', [SupplyController::class, 'show'])->name('inventory.supply.show');
+
     Route::get('/transaction', [TransactionController::class, 'index'])->name('inventory.transaction');
 
     Route::get('/account', [AccountController::class, 'index'])->name('inventory.account');
     Route::put('/account/editprofile', [AccountController::class, 'updateProfile'])->name('inventory.account.editprofile');
     Route::put('/account/editpassword', [AccountController::class, 'updatePassword'])->name('inventory.account.editpassword');
 
-    Route::get('/help', [HelpController::class, 'index'])->name('inventory.help');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 

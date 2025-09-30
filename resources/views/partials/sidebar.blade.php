@@ -1,12 +1,14 @@
 <div class="sidebar">
-    <h4 class="mb-4">Inventory</h4>
+    <h4 class="mb-4">Detrais-Inventory</h4>
 
     <h6>Menu</h6>
     <a href="{{ route('inventory.dashboard') }}"
         class="{{ request()->routeIs('inventory.dashboard') ? 'active' : '' }}">Dashboard</a>
 
     <a href="{{ route('inventory.supply') }}"
-        class="{{ request()->routeIs('inventory.supply') ? 'active' : '' }}">Supply</a>
+        class="{{ request()->routeIs('inventory.supply') || request()->routeIs('inventory.supply.show') ? 'active' : '' }}">
+        Supply
+    </a>
 
     <a href="{{ route('inventory.transaction') }}"
         class="{{ request()->routeIs('inventory.transaction') ? 'active' : '' }}">Transaction</a>
@@ -39,6 +41,5 @@
     <a href="{{ route('inventory.account') }}"
         class="{{ request()->routeIs('inventory.account') ? 'active' : '' }}">Account</a>
 
-    <a href="{{ route('inventory.help') }}"
-        class="{{ request()->routeIs('inventory.help') ? 'active' : '' }}">Help</a>
+
 </div>

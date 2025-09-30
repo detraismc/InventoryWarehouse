@@ -113,6 +113,27 @@
         }
 
 
+        .nav-tabs {
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .nav-tabs .nav-link {
+            color: #9c9bb9;
+            font-weight: 600;
+            border: none;
+            border-bottom: 3px solid transparent;
+            border-radius: 0;
+            padding: .75rem 1.25rem;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #4f46e5;
+            font-weight: 600;
+            border-bottom: 3px solid #4f46e5;
+            background: transparent;
+        }
+
+
 
         .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
             background-color: #4f46e5;
@@ -158,12 +179,63 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#logTable').DataTable({
+                pageLength: 10,
+                order: [
+                    [0, 'date']
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: 3
+                }]
+            });
+        });
+        $(document).ready(function() {
+            $('#supplyTable').DataTable({
+                pageLength: 10,
+                order: [
+                    [0, 'date']
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: 3
+                }]
+            });
+        });
+
+        function formatRupiah(value) {
+            return value.replace(/\D/g, "") // keep only numbers
+                .replace(/\B(?=(\d{3})+(?!\d))/g, "."); // add dot separator
+        }
+
+        function cleanRupiah(value) {
+            return value.replace(/\./g, ""); // remove dots for raw value
+        }
+
+        // Format live input
+        document.querySelectorAll('.rupiah-format').forEach(function(input) {
+            input.addEventListener('input', function() {
+                this.value = formatRupiah(this.value);
+            });
+        });
+
+        // Before form submit → clean values
+        document.querySelectorAll('form').forEach(function(form) {
+            form.addEventListener('submit', function() {
+                form.querySelectorAll('.rupiah-format').forEach(function(input) {
+                    input.value = cleanRupiah(input.value);
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

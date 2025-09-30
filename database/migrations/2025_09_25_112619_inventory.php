@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('warehouse', function (Blueprint $table) {
             $table->id();
             $table->string('name', '100');
-            $table->string('description', '255');
-            $table->string('address', '255');
+            $table->string('description', '255')->nullable()->default(null);
+            $table->string('address', '255')->nullable()->default(null);
             $table->timestamps();
         });
 
@@ -28,18 +28,12 @@ return new class extends Migration
 
         Schema::create('item', function (Blueprint $table) {
             $table->id();
-            $table->string('name', '100');
-            $table->string('description', '255');
-            $table->integer('category_id');
-            $table->timestamps();
-        });
-
-        Schema::create('item_data', function (Blueprint $table) {
-            $table->id();
-            $table->integer('item_id');
             $table->integer('warehouse_id');
+            $table->string('name', '100');
+            $table->string('description', '255')->nullable()->default(null);
+            $table->integer('category_id');
             $table->integer('quantity')->default(0);
-            $table->string('sku', '100');
+            $table->string('sku', '100')->nullable()->default(null);
             $table->integer('standard_supply_cost')->default(0);
             $table->integer('standard_sell_price')->default(0);
             $table->integer('reorder_level')->default(-1);
@@ -69,9 +63,9 @@ return new class extends Migration
 
         Schema::create('user_log', function (Blueprint $table) {
             $table->id();
-            $table->string('sender', '50');
-            $table->string('log_type', '50');
-            $table->string('log', '255');
+            $table->string('sender', '50')->nullable()->default(null);
+            $table->string('log_type', '50')->nullable()->default(null);
+            $table->string('log', '255')->nullable()->default(null);
             $table->timestamps();
         });
     }
