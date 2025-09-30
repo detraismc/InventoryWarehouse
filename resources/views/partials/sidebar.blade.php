@@ -1,5 +1,5 @@
 <div class="sidebar">
-    <h4 class="mb-4">Inventory</h4>
+    <h4 class="mb-4">Detrais-Inventory</h4>
 
     <h6>Menu</h6>
     <a href="{{ route('inventory.dashboard') }}"

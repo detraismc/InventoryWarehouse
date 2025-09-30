@@ -5,7 +5,7 @@
 @section('content')
 
 
-    <div class="container py-4">
+    <div class="container py-1">
         <div class="card">
             <!-- Warehouse Tabs as Card Header -->
             <div class="card-header border-0 pb-1.2">
@@ -25,6 +25,26 @@
 
             <!-- Tab Contents -->
             <div class="card-body">
+
+
+
+                <div class="mb-4">
+                    <span class="d-block text-muted fst-italic mb-2">
+                        {{ $warehouse->description ?? 'No description available' }}
+                    </span>
+                    <span class="badge bg-light text-dark px-3 py-2">
+                        <i class="bi bi-geo-alt me-1 text-danger"></i>
+                        {{ $warehouse->address }}
+                    </span>
+                </div>
+
+
+
+
+
+
+
+
 
                 <h5 class="mb-1.5">Actions:</h5>
 
@@ -78,10 +98,9 @@
                         </tbody>
                     </table>
                 </div>
-
-
-
             </div>
+
+
         </div>
     </div>
 
