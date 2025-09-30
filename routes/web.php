@@ -57,7 +57,6 @@ Route::middleware(['auth', 'role:admin,manager,user'])->group(function () {
     Route::put('/account/editprofile', [AccountController::class, 'updateProfile'])->name('inventory.account.editprofile');
     Route::put('/account/editpassword', [AccountController::class, 'updatePassword'])->name('inventory.account.editpassword');
 
-    Route::get('/help', [HelpController::class, 'index'])->name('inventory.help');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 

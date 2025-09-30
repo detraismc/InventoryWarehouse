@@ -41,6 +41,5 @@
     <a href="{{ route('inventory.account') }}"
         class="{{ request()->routeIs('inventory.account') ? 'active' : '' }}">Account</a>
 
-    <a href="{{ route('inventory.help') }}"
-        class="{{ request()->routeIs('inventory.help') ? 'active' : '' }}">Help</a>
+
 </div>
