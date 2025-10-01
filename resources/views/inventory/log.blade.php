@@ -6,7 +6,7 @@
 
     <div class="card p-3">
         <div class="table-responsive">
-            <table id="logTable" class="table table-striped table-bordered align-middle">
+            <table id="dataTable" class="table table-striped table-bordered align-middle">
                 <thead>
                     <tr>
                         <th>Date</th>

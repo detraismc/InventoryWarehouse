@@ -23,5 +23,9 @@ class Item extends Model
     public function category () {
         return $this->belongsTo(Category::class, 'category_id');
     }
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id');
+    }
 
 }

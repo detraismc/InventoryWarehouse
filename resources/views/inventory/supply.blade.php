@@ -66,34 +66,33 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table id="supplyTable" class="table table-striped table-bordered align-middle">
+                    <table id="dataTable" class="table table-striped table-bordered align-middle">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th style="width: 20px;">#</th>
                                 <th>Name</th>
                                 <th>Category</th>
                                 <th>Quantity</th>
                                 <th>Reorder Level</th>
-                                <th class="text-center">Details</th>
+                                <th style="width: 80px;" class="text-center"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($itemDataList as $itemData)
+                            @foreach ($itemList as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $itemData->item->name }}</td>
-                                    <td>{{ $itemData->item->category }}</td>
-                                    <td>{{ $itemData->quantity }}</td>
-                                    <td>{{ $itemData->reorder_level }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->category->name }}</td>
+                                    <td>{{ $item->quantity }}</td>
+                                    <td>{{ $item->reorder_level }}</td>
                                     <td class="text-center">
-                                        <form action="{{ route('inventory.log.delete', ['id' => $log->id]) }}"
-                                            id="deleteForm" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-custom btn-delete">X</button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-custom btn-edit me-2"
+                                            data-bs-toggle="modal" data-bs-target="#itemDetailsModal{{ $item->id }}">
+                                            Details
+                                        </button>
                                     </td>
                                 </tr>
+                                @include('partials.modal_supplydetail')
                             @endforeach
                         </tbody>
                     </table>
@@ -107,218 +106,110 @@
 
 
 
-    <!-- Add Supply Modal -->
-    <div class="modal fade" id="addSupplyModal" tabindex="-1" aria-labelledby="addSupplyModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-semibold" id="addSupplyModalLabel">Add Supply</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form action="#" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <!-- Item Dropdown -->
-                        <div class="mb-3">
-                            <label for="Item" class="form-label">Item</label>
-                            <select class="form-select" id="Item" name="item_id" required>
-                                <option value="">-- Select Item --</option>
-                                @foreach ($itemList as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Quantity + Cost -->
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="Quantity" class="form-label">Quantity</label>
-                                <input type="number" class="form-control" id="Quantity" name="quantity" placeholder="Qty"
-                                    required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="Cost" class="form-label">Cost per Item</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp</span>
-                                    <input type="text" class="form-control rupiah-format" id="Cost" name="cost"
-                                        placeholder="Enter Cost" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Transport Fee -->
-                        <div class="mb-3">
-                            <label for="TransportFee" class="form-label">Transport Fee</label>
-                            <div class="input-group">
-                                <span class="input-group-text">Rp</span>
-                                <input type="text" class="form-control rupiah-format" id="TransportFee"
-                                    name="transport_fee" placeholder="Enter Transport Fee">
-                            </div>
-                        </div>
-
-
-                        <!-- Entity -->
-                        <div class="mb-3">
-                            <label for="Entity" class="form-label">Entity</label>
-                            <input type="text" class="form-control" id="Entity" name="entity"
-                                placeholder="Enter Entity">
-                        </div>
-
-                        <!-- Notes -->
-                        <div class="mb-3">
-                            <label for="Notes" class="form-label">Notes</label>
-                            <textarea class="form-control" id="Notes" name="notes" rows="2" placeholder="Enter Notes"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-custom btn-add btn-sm">Create Supply</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    @include('partials.modal_addsupply')
+    @include('partials.modal_sellsupply')
+    @include('partials.modal_transportsupply')
 
 
 
 
 
-    <!-- Sell Supply Modal -->
-    <div class="modal fade" id="sellSupplyModal" tabindex="-1" aria-labelledby="sellSupplyModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-semibold" id="sellSupplyModalLabel">Sell Supply</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form action="#" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <!-- Item Dropdown -->
-                        <div class="mb-3">
-                            <label for="Item" class="form-label">Item</label>
-                            <select class="form-select" id="Item" name="item_id" required>
-                                <option value="">-- Select Item --</option>
-                                @foreach ($itemList as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Quantity + Revenue -->
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="Quantity" class="form-label">Quantity</label>
-                                <input type="number" class="form-control" id="Quantity" name="quantity"
-                                    placeholder="Qty" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="Revenue" class="form-label">Revenue per Item</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp</span>
-                                    <input type="text" class="form-control rupiah-format" id="Revenue"
-                                        name="revenue" placeholder="Enter Revenue" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Transport Fee -->
-                        <div class="mb-3">
-                            <label for="TransportFee" class="form-label">Transport Fee</label>
-                            <div class="input-group">
-                                <span class="input-group-text">Rp</span>
-                                <input type="text" class="form-control rupiah-format" id="TransportFee"
-                                    name="transport_fee" placeholder="Enter Transport Fee">
-                            </div>
-                        </div>
-
-                        <!-- Entity -->
-                        <div class="mb-3">
-                            <label for="Entity" class="form-label">Entity</label>
-                            <input type="text" class="form-control" id="Entity" name="entity"
-                                placeholder="Enter Entity">
-                        </div>
-
-                        <!-- Notes -->
-                        <div class="mb-3">
-                            <label for="Notes" class="form-label">Notes</label>
-                            <textarea class="form-control" id="Notes" name="notes" rows="2" placeholder="Enter Notes"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-custom btn-add btn-sm">Sell Supply</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
 
 
 
-    <!-- Transport Supply Modal -->
-    <div class="modal fade" id="transportSupplyModal" tabindex="-1" aria-labelledby="transportSupplyModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-semibold" id="transportSupplyModalLabel">Transport Supply</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form action="#" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <!-- Item Dropdown -->
-                        <div class="mb-3">
-                            <label for="Item" class="form-label">Item</label>
-                            <select class="form-select" id="Item" name="item_id" required>
-                                <option value="">-- Select Item --</option>
-                                @foreach ($itemList as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Quantity + Transport Fee -->
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="Quantity" class="form-label">Quantity</label>
-                                <input type="number" class="form-control" id="Quantity" name="quantity"
-                                    placeholder="Qty" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="TransportFee" class="form-label">Transport Fee</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp</span>
-                                    <input type="text" class="form-control rupiah-format" id="TransportFee"
-                                        name="transport_fee" placeholder="Enter Transport Fee">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Warehouse -->
-                        <div class="mb-3">
-                            <label for="Warehouse" class="form-label">Warehouse</label>
-                            <input type="text" class="form-control" id="Warehouse" name="warehouse"
-                                placeholder="Enter Warehouse">
-                        </div>
-
-                        <!-- Notes -->
-                        <div class="mb-3">
-                            <label for="Notes" class="form-label">Notes</label>
-                            <textarea class="form-control" id="Notes" name="notes" rows="2" placeholder="Enter Notes"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-custom btn-add btn-sm">Transport Supply</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
 
 
+
+
+
+
+
+
+
+
+
+
+    <script>
+        document.addEventListener("input", function(e) {
+            if (e.target.type === "number" && e.target.name.includes("[quantity]")) {
+                if (e.target.value < 1) e.target.value = 1;
+            }
+        });
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // Find all modals that need their forms handled
+            const managedModals = document.querySelectorAll(".modal-form-handler");
+
+            managedModals.forEach(modal => {
+                const container = modal.querySelector(
+                    ".items-container");
+
+
+                // --- DYNAMIC ROW LOGIC (ONLY APPLIES IF A CONTAINER EXISTS) ---
+                if (container) {
+                    const addBtn = modal.querySelector(".add-item-btn");
+                    let index = 1;
+
+                    // Function to show/hide remove buttons
+                    const updateRemoveButtons = () => {
+                        const rows = container.querySelectorAll(".item-row");
+                        rows.forEach(row => {
+                            const removeBtn = row.querySelector(".remove-item-btn");
+                            removeBtn.classList.toggle("d-none", rows.length <= 1);
+                        });
+                    };
+
+                    // Add new item row
+                    addBtn.addEventListener("click", function() {
+                        let newRow = container.firstElementChild.cloneNode(true);
+
+                        newRow.querySelectorAll("input, select").forEach(el => el.value = "");
+
+                        const newQuantityInput = newRow.querySelector("input[name*='[quantity]']");
+                        if (newQuantityInput) newQuantityInput.value = "1";
+
+                        newRow.querySelectorAll("[name]").forEach(el => {
+                            el.name = el.name.replace(/\[\d+\]/, `[${index}]`);
+                        });
+
+                        container.appendChild(newRow);
+                        index++;
+                        updateRemoveButtons();
+                    });
+
+                    // Event delegation for remove and select changes
+                    container.addEventListener("click", function(e) {
+                        if (e.target.classList.contains("remove-item-btn")) {
+                            e.target.closest(".item-row").remove();
+                            updateRemoveButtons();
+                        }
+                    });
+
+                    container.addEventListener("change", function(e) {
+                        if (e.target.tagName === "SELECT") {
+                            const selectedOption = e.target.options[e.target.selectedIndex];
+                            const value = selectedOption.getAttribute("data-value");
+                            const row = e.target.closest(".item-row");
+                            const valueInput = row.querySelector(
+                                "input[name*='[cost]'], input[name*='[revenue]']");
+
+                            if (valueInput) {
+                                valueInput.value = value ? new Intl.NumberFormat("id-ID").format(
+                                    value) : "";
+                            }
+                        }
+                    });
+
+                    // Set initial state
+                    updateRemoveButtons();
+                }
+            });
+        });
+    </script>
 
 
 @endsection

@@ -43,9 +43,10 @@ return new class extends Migration
         Schema::create('transaction', function (Blueprint $table) {
             $table->id();
             $table->integer('warehouse_id');
-            $table->string('entity', '100');
+            $table->string('entity', '100')->nullable()->default(null);
             $table->string('type', '50');
             $table->string('stage', '50');
+            $table->integer('warehouse_target')->default(-1);
             $table->integer('transport_fee')->default(0);
             $table->string('notes', '255')->nullable()->default(null);
             $table->timestamps();

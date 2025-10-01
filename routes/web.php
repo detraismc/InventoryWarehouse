@@ -50,6 +50,8 @@ Route::middleware(['auth', 'role:admin,manager,user'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('inventory.dashboard');
     Route::get('/supply', [SupplyController::class, 'index'])->name('inventory.supply');
     Route::get('/supply/{warehouse}', [SupplyController::class, 'show'])->name('inventory.supply.show');
+    Route::post('/supply/store', [SupplyController::class, 'store'])->name('inventory.supply.store');
+
 
     Route::get('/transaction', [TransactionController::class, 'index'])->name('inventory.transaction');
 
