@@ -11,7 +11,7 @@ class itemController extends Controller
 {
     public function index()
     {
-        $itemList = Item::with('category')->get();
+        $itemList = Item::with(['category', 'warehouse'])->get();
         $categoryList = Category::all();
         $warehouseList = Warehouse::all();
         return view('inventory.item', compact('itemList', 'categoryList', 'warehouseList'));
@@ -27,13 +27,13 @@ class itemController extends Controller
             'quantity' => 'required|integer|min:0',
             'sku' => 'required|min:3',
             'standard_supply_cost' => 'required',
-            'standard_sell_cost' => 'required',
+            'standard_sell_price' => 'required',
             'reorder_level' => 'nullable|integer|min:-1'
         ]);
 
         // Clean Rupiah formatting (remove dots)
         $validated['standard_supply_cost'] = str_replace('.', '', $request->standard_supply_cost);
-        $validated['standard_sell_cost']   = str_replace('.', '', $request->standard_sell_cost);
+        $validated['standard_sell_price']   = str_replace('.', '', $request->standard_sell_price);
         Item::create($validated);
         return redirect()->route('inventory.item')->with('success', 'item berhasil ditambahkan');
     }
@@ -49,9 +49,11 @@ class itemController extends Controller
             'quantity' => 'required|integer|min:0',
             'sku' => 'required|min:3',
             'standard_supply_cost' => 'required',
-            'standard_sell_cost' => 'required',
+            'standard_sell_price' => 'required',
             'reorder_level' => 'nullable|integer|min:-1'
         ]);
+        $validated['standard_supply_cost'] = str_replace('.', '', $request->standard_supply_cost);
+        $validated['standard_sell_price']   = str_replace('.', '', $request->standard_sell_price);
         Item::where('id', $id)->update($validated);
         return redirect()->route('inventory.item')->with('success', 'item berhasil di edit');
     }

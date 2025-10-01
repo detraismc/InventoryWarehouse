@@ -6,11 +6,12 @@
 
     <div class="card p-3">
         <div class="table-responsive">
-            <table class="table align-middle">
+            <table id="dataTable" class="table table-striped table-bordered align-middle">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Name</th>
+                        <th>Warehouse</th>
                         <th>Category</th>
                         <th>Quantity</th>
                         <th class="text-center">Actions</th>
@@ -21,15 +22,21 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->name }}</td>
+                            <td>{{ $item->warehouse->name }}</td>
                             <td>{{ $item->category->name }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td class="text-center">
                                 <a href="#" class="btn btn-sm btn-custom btn-edit me-2" data-bs-toggle="modal"
                                     data-bs-target="#editItemModal" data-id="{{ $item->id }}"
                                     data-name="{{ $item->name }}" data-description="{{ $item->description }}"
-                                    data-category="{{ $item->category->id }}">
+                                    data-category="{{ $item->category->id }}"
+                                    data-warehouse="{{ $item->warehouse->id ?? '' }}" data-quantity="{{ $item->quantity }}"
+                                    data-supply-cost="{{ $item->standard_supply_cost }}"
+                                    data-sell-price="{{ $item->standard_sell_price }}"
+                                    data-reorder-level="{{ $item->reorder_level }}" data-sku="{{ $item->sku }}">
                                     Edit
                                 </a>
+
                             </td>
                         </tr>
                     @endforeach
@@ -111,11 +118,11 @@
 
                         <!-- Standard Sell Cost -->
                         <div class="mb-3">
-                            <label for="standard_sell_cost" class="form-label">Standard Sell Cost</label>
+                            <label for="standard_sell_price" class="form-label">Standard Sell Price</label>
                             <div class="input-group">
                                 <span class="input-group-text">Rp</span>
-                                <input type="text" class="form-control rupiah-format" id="standard_sell_cost"
-                                    name="standard_sell_cost" placeholder="Enter Sell Cost" required>
+                                <input type="text" class="form-control rupiah-format" id="standard_sell_price"
+                                    name="standard_sell_price" placeholder="Enter Sell Cost" required>
                             </div>
                         </div>
 
@@ -214,11 +221,11 @@
 
                         <!-- Standard Sell Cost -->
                         <div class="mb-3">
-                            <label for="editStandardSellCost" class="form-label">Standard Sell Cost</label>
+                            <label for="editStandardSellPrice" class="form-label">Standard Sell Price</label>
                             <div class="input-group">
                                 <span class="input-group-text">Rp</span>
-                                <input type="text" class="form-control rupiah-format" id="editStandardSellCost"
-                                    name="standard_sell_cost" placeholder="Enter Sell Cost" required>
+                                <input type="text" class="form-control rupiah-format" id="editStandardSellPrice"
+                                    name="standard_sell_price" placeholder="Enter Sell Price" required>
                             </div>
                         </div>
 
@@ -230,8 +237,8 @@
                                     placeholder="Enter Reorder Level" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editSku" class="form-label">SKU</label>
-                                <input type="text" class="form-control" id="editSku" name="sku"
+                                <label for="editSKU" class="form-label">SKU</label>
+                                <input type="text" class="form-control" id="editSKU" name="sku"
                                     placeholder="Enter SKU" required>
                             </div>
                         </div>
@@ -268,7 +275,7 @@
                 var quantity = button.getAttribute('data-quantity');
                 var sku = button.getAttribute('data-sku');
                 var supplyCost = button.getAttribute('data-supply-cost');
-                var sellCost = button.getAttribute('data-sell-cost');
+                var sellPrice = button.getAttribute('data-sell-price');
                 var reorderLevel = button.getAttribute('data-reorder-level');
 
                 // Fill fields
@@ -279,7 +286,7 @@
                 editModal.querySelector('#editQuantity').value = quantity;
                 editModal.querySelector('#editSKU').value = sku;
                 editModal.querySelector('#editStandardSupplyCost').value = formatRupiah(supplyCost || '');
-                editModal.querySelector('#editStandardSellCost').value = formatRupiah(sellCost || '');
+                editModal.querySelector('#editStandardSellPrice').value = formatRupiah(sellPrice || '');
                 editModal.querySelector('#editReorderLevel').value = reorderLevel;
 
                 // Update form action

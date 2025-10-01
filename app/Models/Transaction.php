@@ -13,13 +13,24 @@ class Transaction extends Model
         'entity',
         'type',
         'stage',
+        'warehouse_target',
         'transport_fee',
         'notes'
     ];
 
     public function getTransactionItem()
     {
-        return $this->hasMany(ItemData::class, 'transaction_id');
+        return $this->hasMany(TransactionItem::class, 'transaction_id');
+    }
+
+    public function getWarehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id');
+    }
+
+    public function getWarehouseTarget()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_target');
     }
 
 }

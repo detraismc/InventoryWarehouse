@@ -15,4 +15,14 @@ class TransactionItem extends Model
         'revenue',
         'cost'
     ];
+
+    public function getTransaction()
+    {
+        return $this->belongsTo(Transaction::class, 'transaction_id');
+    }
+
+    public function getItem()
+    {
+        return $this->belongsTo(Item::class, 'item_id');
+    }
 }

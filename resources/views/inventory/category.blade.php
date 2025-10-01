@@ -60,7 +60,7 @@
                         <div class="mb-3">
                             <label for="CategoryDescription" class="form-label">Description</label>
                             <input type="text" class="form-control" id="CategoryDescription" name="description"
-                                placeholder="Enter Description" required>
+                                placeholder="Enter Description">
                         </div>
                     </div>
                     <div class="modal-footer">

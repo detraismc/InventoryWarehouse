@@ -1,6 +1,6 @@
 @extends('layouts.inventory')
 
-@section('title', 'Supply Overview')
+@section('title', 'Transaction')
 
 @section('content')
     <div class="container py-3">
@@ -10,13 +10,13 @@
                     <img src="{{ asset('images/no_search.jpg') }}" alt="NoSearch" width="200" height="200">
                 </div>
 
-                <h3 class="fw-semibold mb-3" style="color: #333;">No Warehouses Found</h3>
+                <h3 class="fw-semibold mb-3" style="color: #333;">No Transaction Found</h3>
                 <p class="text-muted mb-4">
-                    You have no warehouse yet. Please add one from the <strong>Warehouse Sidebar</strong> to get started.
+                    You have no active transaction yet. You can add from the <strong>Supply Sidebar</strong>.
                 </p>
-                <a href="{{ route('inventory.warehouse') }}">
+                <a href="{{ route('inventory.supply') }}">
                     <button class="btn btn-custom btn-add">
-                        Go to Warehouses
+                        Go to Supply
                     </button>
                 </a>
 

@@ -187,27 +187,8 @@
     <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#logTable').DataTable({
-                pageLength: 10,
-                order: [
-                    [0, 'date']
-                ],
-                columnDefs: [{
-                    orderable: false,
-                    targets: 3
-                }]
-            });
-        });
-        $(document).ready(function() {
-            $('#supplyTable').DataTable({
-                pageLength: 10,
-                order: [
-                    [0, 'date']
-                ],
-                columnDefs: [{
-                    orderable: false,
-                    targets: 3
-                }]
+            $('#dataTable').DataTable({
+                pageLength: 10
             });
         });
 
@@ -216,23 +197,10 @@
                 .replace(/\B(?=(\d{3})+(?!\d))/g, "."); // add dot separator
         }
 
-        function cleanRupiah(value) {
-            return value.replace(/\./g, ""); // remove dots for raw value
-        }
-
         // Format live input
         document.querySelectorAll('.rupiah-format').forEach(function(input) {
             input.addEventListener('input', function() {
                 this.value = formatRupiah(this.value);
-            });
-        });
-
-        // Before form submit → clean values
-        document.querySelectorAll('form').forEach(function(form) {
-            form.addEventListener('submit', function() {
-                form.querySelectorAll('.rupiah-format').forEach(function(input) {
-                    input.value = cleanRupiah(input.value);
-                });
             });
         });
     </script>
