@@ -29,6 +29,7 @@ return new class extends Migration
         Schema::create('item', function (Blueprint $table) {
             $table->id();
             $table->integer('warehouse_id');
+            $table->string('name_id', '100');
             $table->string('name', '100');
             $table->string('description', '255')->nullable()->default(null);
             $table->integer('category_id');

@@ -54,6 +54,8 @@ Route::middleware(['auth', 'role:admin,manager,user'])->group(function () {
 
 
     Route::get('/transaction', [TransactionController::class, 'index'])->name('inventory.transaction');
+    Route::get('/transaction/completed', [TransactionController::class, 'indexCompleted'])->name('inventory.transaction.completed');
+    Route::patch('/transaction/{id}/updatestage', [TransactionController::class, 'updateStage'])->name('inventory.transaction.updatestage');
 
     Route::get('/account', [AccountController::class, 'index'])->name('inventory.account');
     Route::put('/account/editprofile', [AccountController::class, 'updateProfile'])->name('inventory.account.editprofile');
