@@ -168,6 +168,7 @@
 
                     <div class="modal-body">
                         <!-- Item Name -->
+
                         <div class="mb-3">
                             <label for="editItemName" class="form-label">Item Name</label>
                             <input type="text" class="form-control" id="editItemName" name="name" required>

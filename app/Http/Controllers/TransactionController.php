@@ -3,70 +3,113 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
 
     public function index()
     {
-        $transactionList = Transaction::all();
+        // Only get transactions that are NOT completed
+        $transactionList = Transaction::where('stage', '!=', 'completed')->get();
 
         if ($transactionList->isNotEmpty()) {
             return view('inventory.transaction', compact('transactionList'));
         }
 
+        // If all are completed, show "no transaction" page
         return view('inventory.transaction_notransaction');
     }
 
 
-    public function store(Request $request)
+    public function indexCompleted()
+    {
+        // ✅ Only fetch completed transactions
+        $transactionList = Transaction::where('stage', 'completed')->get();
+
+        if ($transactionList->isNotEmpty()) {
+            return view('inventory.transaction_completed', compact('transactionList'));
+        }
+
+        // ✅ No completed transactions at all
+        return view('inventory.transaction_notransaction');
+    }
+
+
+
+    public function updateStage(Request $request, string $id)
     {
         $validated = $request->validate([
-            'warehouse_id' => 'required|min:1',
-
-            'entity' => 'required|min:3',
-            'type' => 'required|in:BUY,SELL,TRANSPORT',
-            'stage' => 'required|in:PACKAGING,SHIPMENT,COMPLETED',
-            'transport_fee' => 'required|integer|min:1'
+            'stage' => 'required|in:pending,packaging,shipment,completed',
         ]);
-        Transaction::create($validated);
 
-        return redirect()->route('inventory.transaction')->with('success', 'Transactions berhasil ditambahkan');
+        $transaction = Transaction::with('getTransactionItem.getItem')->findOrFail($id);
+
+        DB::beginTransaction();
+        try {
+            // ✅ Update stage
+            $transaction->update([
+                'stage' => $validated['stage'],
+            ]);
+
+            // ✅ Handle stock changes only when completed
+            if ($validated['stage'] === 'completed') {
+                if ($transaction->type === 'supply') {
+                    foreach ($transaction->getTransactionItem as $tItem) {
+                        $item = $tItem->getItem;
+                        if ($item) {
+                            $item->increment('quantity', $tItem->quantity);
+                        }
+                    }
+                } elseif ($transaction->type === 'transport') {
+                    foreach ($transaction->getTransactionItem as $tItem) {
+                        $sourceItem = $tItem->getItem;
+
+                        $targetItem = Item::where('warehouse_id', $transaction->warehouse_target)
+                            ->where('name_id', $sourceItem->name_id)
+                            ->first();
+
+                        if ($targetItem) {
+                            $targetItem->increment('quantity', $tItem->quantity);
+                        } else {
+                            Item::create([
+                                'category_id'          => $sourceItem->category_id,
+                                'warehouse_id'         => $transaction->warehouse_target,
+                                'name_id'              => $sourceItem->name_id,
+                                'name'                 => $sourceItem->name,
+                                'description'          => $sourceItem->description,
+                                'sku'                  => $sourceItem->sku,
+                                'quantity'             => $tItem->quantity,
+                                'standard_supply_cost' => $sourceItem->standard_supply_cost,
+                                'standard_sell_price'  => $sourceItem->standard_sell_price,
+                                'reorder_level'        => $sourceItem->reorder_level,
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            DB::commit();
+
+            // ✅ Dynamic success message
+            $stageMessages = [
+                'pending'   => 'Transaction ' + $validated['id'] + '# has been set to Pending.',
+                'packaging' => 'Transaction ' + $validated['id'] + '# is now in Packaging stage.',
+                'shipment'  => 'Transaction ' + $validated['id'] + '# is now in Shipment stage.',
+                'completed' => 'Transaction ' + $validated['id'] + '# completed successfully.',
+            ];
+
+            return redirect()->route('inventory.transaction')
+                ->with('success', $stageMessages[$validated['stage']] ?? 'Transaction stage updated.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Update stage failed: ' . $e->getMessage()]);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $validated = $request->validate([
-            'warehouse_id' => 'required|min:1',
-
-            'entity' => 'required|min:3',
-            'type' => 'required|in:BUY,SELL,TRANSPORT',
-            'stage' => 'required|in:PACKAGING,SHIPMENT,COMPLETED',
-            'transport_fee' => 'required|integer|min:1'
-        ]);
-        Transaction::where('id', $id)->update($validated);
-        return redirect()->route('inventory.transaction')->with('success', 'Transaction berhasil di edit');
-    }
 
     /**
      * Remove the specified resource from storage.

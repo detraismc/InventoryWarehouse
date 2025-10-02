@@ -113,6 +113,33 @@
         }
 
 
+        .badge-pending {
+            background-color: #ff6e6e;
+            /* orange */
+            color: #fff;
+        }
+
+        .badge-packaging {
+            background-color: #3498db;
+            /* blue */
+            color: #fff;
+        }
+
+        .badge-shipment {
+            background-color: #f1c40f;
+            /* yellow */
+            color: #000;
+        }
+
+        .badge-completed {
+            background-color: #2ecc71;
+            /* green */
+            color: #fff;
+        }
+
+
+
+
         .nav-tabs {
             border-bottom: 2px solid #e5e7eb;
         }
@@ -154,29 +181,30 @@
 
 
         <div class="flex-grow-1">
-
             <div class="container-fluid p-4">
                 <h5 class="mb-4">@yield('title', 'Inventory')</h5>
 
                 @if (session('success'))
-                    <div class="alert alert-success alert dismissable fade-show" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss='alert' aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
                 @if ($errors->any())
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <ul class="mb-0">
                             @foreach ($errors->all() as $item)
                                 <li>{{ $item }}</li>
                             @endforeach
                         </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
                 @yield('content')
             </div>
+
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
