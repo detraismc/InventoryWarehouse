@@ -24,6 +24,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/user/{id}', [UserController::class, 'update'])->name('inventory.user.edit');
     Route::put('/user/{id}/password', [UserController::class, 'updatePassword'])->name('inventory.user.editpassword');
     Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('inventory.user.delete');
+
+    Route::get('/log/transaction', [LogController::class, 'transaction'])->name('inventory.log.transaction');
+    Route::get('/log/account', [LogController::class, 'account'])->name('inventory.log.account');
+    Route::get('/log/setup', [LogController::class, 'setup'])->name('inventory.log.setup');
+    Route::delete('/log/delete/{id}', [LogController::class, 'destroy'])->name('inventory.log.delete');
 });
 
 Route::middleware(['auth', 'role:admin,manager'])->group(function () {
@@ -39,11 +44,9 @@ Route::middleware(['auth', 'role:admin,manager'])->group(function () {
 
     Route::get('/item', [ItemController::class, 'index'])->name('inventory.item');
     Route::post('/item', [ItemController::class, 'store'])->name('inventory.item.create');
+    Route::post('/item/duplicate', [ItemController::class, 'duplicate'])->name('inventory.item.duplicate');
     Route::put('/item/{id}', [ItemController::class, 'update'])->name('inventory.item.edit');
     Route::delete('/item/{id}', [ItemController::class, 'destroy'])->name('inventory.item.delete');
-
-    Route::get('/log', [LogController::class, 'index'])->name('inventory.log');
-    Route::delete('/log/{id}', [LogController::class, 'destroy'])->name('inventory.log.delete');
 });
 
 Route::middleware(['auth', 'role:admin,manager,user'])->group(function () {
@@ -56,6 +59,7 @@ Route::middleware(['auth', 'role:admin,manager,user'])->group(function () {
     Route::get('/transaction', [TransactionController::class, 'index'])->name('inventory.transaction');
     Route::get('/transaction/completed', [TransactionController::class, 'indexCompleted'])->name('inventory.transaction.completed');
     Route::patch('/transaction/{id}/updatestage', [TransactionController::class, 'updateStage'])->name('inventory.transaction.updatestage');
+    Route::delete('/transaction/{id}/delete', [TransactionController::class, 'destroy'])->name('inventory.transaction.delete');
 
     Route::get('/account', [AccountController::class, 'index'])->name('inventory.account');
     Route::put('/account/editprofile', [AccountController::class, 'updateProfile'])->name('inventory.account.editprofile');

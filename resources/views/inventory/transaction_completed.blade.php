@@ -36,6 +36,7 @@
                             <th>Total Cost</th>
                             <th>Total Revenue</th>
                             <th>Transport Fee</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,7 +56,7 @@
                                 <td>
                                     <ul class="list-unstyled mb-0 small">
                                         @foreach ($transaction->getTransactionItem as $ti)
-                                            <li>{{ $ti->getItem->name }} ({{ $ti->quantity }})</li>
+                                            <li>{{ $ti->getItem->name ?? '-' }} ({{ $ti->quantity }})</li>
                                         @endforeach
                                     </ul>
                                 </td>
@@ -82,12 +83,26 @@
                                         -
                                     @endif
                                 </td>
+                                <td class="text-center">
+                                    @if (Auth::user() && Auth::user()->role === 'admin')
+                                        <form
+                                            action="{{ route('inventory.transaction.delete', ['id' => $transaction->id]) }}"
+                                            method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-custom btn-delete">X</button>
+                                        </form>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
+
     </div>
 @endsection
 

@@ -6,6 +6,8 @@ use App\Models\Transaction;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\UserLog;
 
 class TransactionController extends Controller
 {
@@ -68,38 +70,30 @@ class TransactionController extends Controller
                         $sourceItem = $tItem->getItem;
 
                         $targetItem = Item::where('warehouse_id', $transaction->warehouse_target)
-                            ->where('name_id', $sourceItem->name_id)
+                            ->where('sku', $sourceItem->sku)
                             ->first();
 
-                        if ($targetItem) {
-                            $targetItem->increment('quantity', $tItem->quantity);
-                        } else {
-                            Item::create([
-                                'category_id'          => $sourceItem->category_id,
-                                'warehouse_id'         => $transaction->warehouse_target,
-                                'name_id'              => $sourceItem->name_id,
-                                'name'                 => $sourceItem->name,
-                                'description'          => $sourceItem->description,
-                                'sku'                  => $sourceItem->sku,
-                                'quantity'             => $tItem->quantity,
-                                'standard_supply_cost' => $sourceItem->standard_supply_cost,
-                                'standard_sell_price'  => $sourceItem->standard_sell_price,
-                                'reorder_level'        => $sourceItem->reorder_level,
-                            ]);
-                        }
+                        $targetItem->increment('quantity', $tItem->quantity);
                     }
                 }
             }
 
-            DB::commit();
-
             // ✅ Dynamic success message
             $stageMessages = [
-                'pending'   => 'Transaction ' + $validated['id'] + '# has been set to Pending.',
-                'packaging' => 'Transaction ' + $validated['id'] + '# is now in Packaging stage.',
-                'shipment'  => 'Transaction ' + $validated['id'] + '# is now in Shipment stage.',
-                'completed' => 'Transaction ' + $validated['id'] + '# completed successfully.',
+                'pending'   => "Transaction {$id}# has been set to Pending.",
+                'packaging' => "Transaction {$id}# is now in Packaging stage.",
+                'shipment'  => "Transaction {$id}# is now in Shipment stage.",
+                'completed' => "Transaction {$id}# completed successfully.",
             ];
+
+            // Store log
+            UserLog::create([
+                'sender' => Auth::user()->name,
+                'log_type' => 'transaction',
+                'log'    => "Advancing Transaction Stage: {$stageMessages[$validated['stage']]}"
+            ]);
+
+            DB::commit();
 
             return redirect()->route('inventory.transaction')
                 ->with('success', $stageMessages[$validated['stage']] ?? 'Transaction stage updated.');
@@ -111,21 +105,24 @@ class TransactionController extends Controller
 
 
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
         $transaction = Transaction::findOrFail($id);
 
         #Delete semua transaction item
-        $transaction->transaction_item()->delete();
-
-        #Delete semua transaction log
-        $transaction->transaction_log()->delete();
+        $transaction->getTransactionItem()->delete();
 
         #Delete warehouse
         $transaction->delete();
-        return redirect()->route('inventory.transaction')->with('success', 'Transaction berhasil didelete');
+
+        // Store log
+        UserLog::create([
+            'sender' => Auth::user()->name,
+            'log_type' => 'transaction',
+            'log'    => "Deleted Transaction: {$id}#"
+        ]);
+
+        return redirect()->route('inventory.transaction.completed')->with('success', 'Transaction berhasil didelete');
     }
 }

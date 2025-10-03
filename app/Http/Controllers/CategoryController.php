@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\UserLog;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -18,6 +20,14 @@ class CategoryController extends Controller
             'description' => 'nullable|string|max:255',
         ]);
         Category::create($validated);
+
+        // Store log
+        UserLog::create([
+            'sender' => Auth::user()->name,
+            'log_type' => 'setup',
+            'log'    => "Created category: {$request->name}"
+        ]);
+
         return redirect()->route('inventory.category')->with('success', 'Category berhasil ditambahkan');
     }
 
@@ -27,14 +37,35 @@ class CategoryController extends Controller
             'name' => 'required|min:3',
             'description' => 'nullable|string|max:255',
         ]);
-        Category::where('id', $id)->update($validated);
+
+        $category = Category::findOrFail($id);
+        $categoryOldName = $category->name;
+        $category->update($validated);
+        $categoryNewName = $category->name;
+
+        // Store log
+        UserLog::create([
+            'sender' => Auth::user()->name,
+            'log_type' => 'setup',
+            'log'    => "Updated category: {$categoryOldName} -> {$categoryNewName}"
+        ]);
+
         return redirect()->route('inventory.category')->with('success', 'Category berhasil di edit');
     }
 
     public function destroy(string $id)
     {
         $category = Category::findOrFail($id);
+        $categoryName = $category->name;
         $category->delete();
+
+        // Store log
+        UserLog::create([
+            'sender' => Auth::user()->name,
+            'log_type' => 'setup',
+            'log'    => "Deleted category: {$categoryName}"
+        ]);
+
         return redirect()->route('inventory.category')->with('success', 'Category berhasil didelete');
     }
 }

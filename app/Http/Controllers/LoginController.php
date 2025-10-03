@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Models\UserLog;
 
 class LoginController extends Controller
 {
@@ -23,6 +24,13 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
+            // Store log
+            UserLog::create([
+                'sender' => Auth::user()->name,
+                'log_type' => 'account',
+                'log'    => "Login"
+            ]);
+
             return redirect()->route('inventory.dashboard');
         }
 
@@ -36,10 +44,18 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        $userName = Auth::user()->name;
         Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        // Store log
+        UserLog::create([
+            'sender' => $userName,
+            'log_type' => 'account',
+            'log'    => "Logout"
+        ]);
 
         return redirect()->route('login');
     }
