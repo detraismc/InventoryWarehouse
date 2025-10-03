@@ -216,7 +216,10 @@
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable({
-                pageLength: 10
+                pageLength: 10,
+                order: [
+                    [0, 'desc']
+                ]
             });
         });
 

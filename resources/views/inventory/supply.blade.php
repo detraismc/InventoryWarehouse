@@ -82,7 +82,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->category->name }}</td>
+                                    <td>{{ $item->category->name ?? '-' }}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>{{ $item->reorder_level }}</td>
                                     <td class="text-center">

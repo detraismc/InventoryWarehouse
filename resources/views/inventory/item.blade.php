@@ -13,6 +13,7 @@
                         <th>Name</th>
                         <th>Warehouse</th>
                         <th>Category</th>
+                        <th>SKU</th>
                         <th>Quantity</th>
                         <th class="text-center">Actions</th>
                     </tr>
@@ -22,15 +23,17 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->name }}</td>
-                            <td>{{ $item->warehouse->name }}</td>
-                            <td>{{ $item->category->name }}</td>
+                            <td>{{ $item->warehouse->name ?? '-' }}</td>
+                            <td>{{ $item->category->name ?? '-' }}</td>
+                            <td>{{ $item->sku }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td class="text-center">
                                 <a href="#" class="btn btn-sm btn-custom btn-edit me-2" data-bs-toggle="modal"
                                     data-bs-target="#editItemModal" data-id="{{ $item->id }}"
                                     data-name="{{ $item->name }}" data-description="{{ $item->description }}"
-                                    data-category="{{ $item->category->id }}"
-                                    data-warehouse="{{ $item->warehouse->id ?? '' }}" data-quantity="{{ $item->quantity }}"
+                                    data-category="{{ $item->category->id ?? '' }}"
+                                    data-warehouse="{{ $item->warehouse->id ?? '' }}"
+                                    data-quantity="{{ $item->quantity }}"
                                     data-supply-cost="{{ $item->standard_supply_cost }}"
                                     data-sell-price="{{ $item->standard_sell_price }}"
                                     data-reorder-level="{{ $item->reorder_level }}" data-sku="{{ $item->sku }}">
@@ -45,9 +48,14 @@
         </div>
     </div>
     <div class="mt-4">
-        <a href="#" class="btn btn-custom btn-add" data-bs-toggle="modal" data-bs-target="#addItemModal">+ Add
-            Item</a>
+        <a href="#" class="btn btn-custom btn-add" data-bs-toggle="modal" data-bs-target="#addItemModal">
+            + Add Item
+        </a>
+        <a href="#" class="btn btn-custom btn-add ms-2" data-bs-toggle="modal" data-bs-target="#duplicateItemModal">
+            + Duplicate Item to Other Warehouse
+        </a>
     </div>
+
 
 
 
@@ -148,6 +156,61 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <!-- Duplicate Item Modal -->
+    <div class="modal fade" id="duplicateItemModal" tabindex="-1" aria-labelledby="duplicateItemModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-semibold" id="duplicateItemModalLabel">Duplicate Item to Other Warehouse
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form action="{{ route('inventory.item.duplicate') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <!-- Select Item -->
+                        <div class="mb-3">
+                            <label for="item_id" class="form-label">Select Item</label>
+                            <select name="item_id" id="item_id" class="form-select" required>
+                                <option value="">-- Select Item --</option>
+                                @foreach ($itemList as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ $item->name }} ({{ optional($item->warehouse)->name ?? '-' }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Select Target Warehouse -->
+                        <div class="mb-3">
+                            <label for="warehouse_id" class="form-label">Select Target Warehouse</label>
+                            <select name="warehouse_id" id="warehouse_id" class="form-select" required>
+                                <option value="">-- Select Warehouse --</option>
+                                @foreach ($warehouseList as $warehouse)
+                                    <option value="{{ $warehouse->id }}">
+                                        {{ $warehouse->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-custom btn-add btn-sm">Duplicate Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
 
 

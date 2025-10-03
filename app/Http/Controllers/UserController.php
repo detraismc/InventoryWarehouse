@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\UserLog;
 
 class UserController extends Controller
 {
@@ -25,6 +27,13 @@ class UserController extends Controller
         ]);
         User::create($validated);
 
+        // Store log
+        UserLog::create([
+            'sender' => Auth::user()->name,
+            'log_type' => 'setup',
+            'log'    => "User Created: {$request->name}"
+        ]);
+
         return redirect()->route('inventory.user')->with('success', 'User berhasil ditambahkan');
     }
 
@@ -35,7 +44,23 @@ class UserController extends Controller
             'email' => 'required|email',
             'role' => 'required|in:admin,manager,user'
         ]);
-        User::where('id', $id)->update($validated);
+
+        $user = User::findOrFail($id);
+        $userOldName = $user->name;
+        $userOldEmail = $user->email;
+        $userOldRole = $user->role;
+        $user->update($validated);
+        $userNewName = $user->name;
+        $userNewEmail = $user->email;
+        $userNewRole = $user->role;
+
+        // Store log
+        UserLog::create([
+            'sender' => Auth::user()->name,
+            'log_type' => 'setup',
+            'log'    => "User Updated: {$userOldName} -> {$userNewName} | {$userOldEmail} -> {$userNewEmail} | {$userOldRole} -> {$userNewRole}"
+        ]);
+
         return redirect()->route('inventory.user')->with('success', 'User berhasil di edit');
     }
 
@@ -46,13 +71,30 @@ class UserController extends Controller
         ]);
         $user = User::findOrFail($id);
         $user->update($validated);
+
+        // Store log
+        UserLog::create([
+            'sender' => Auth::user()->name,
+            'log_type' => 'setup',
+            'log'    => "Password User {$user->name} Updated"
+        ]);
+
         return redirect()->route('inventory.user')->with('success', 'User password berhasil di edit');
     }
 
     public function destroy(string $id)
     {
         $user = User::findOrFail($id);
+        $userName = $user->name;
         $user->delete();
+
+        // Store log
+        UserLog::create([
+            'sender' => Auth::user()->name,
+            'log_type' => 'setup',
+            'log'    => "User {$userName} berhasil didelete"
+        ]);
+
         return redirect()->route('inventory.user')->with('success', 'User berhasil didelete');
     }
 }

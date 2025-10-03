@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\UserLog;
 
 class AccountController extends Controller
 {
@@ -25,6 +26,13 @@ class AccountController extends Controller
             'password' => $validated['password'],
         ]);
 
+        // Store log
+        UserLog::create([
+            'sender' => Auth::user()->name,
+            'log_type' => 'account',
+            'log'    => "Update Password"
+        ]);
+
         return redirect()->route('inventory.account')->with('success', 'Password berhasil diubah');
     }
 
@@ -38,51 +46,22 @@ class AccountController extends Controller
         ]);
 
         $user = Auth::user();
+        $oldName = $user->name;
+        $oldEmail = $user->email;
         $user->update([
             'name'  => $validated['name'],
             'email' => $validated['email']
         ]);
 
+
+        // Store log
+        UserLog::create([
+            'sender' => Auth::user()->name,
+            'log_type' => 'account',
+            'log'    => "Update Profile: {$oldName} -> {$validated['name']}, {$oldEmail} -> {$validated['email']}"
+        ]);
+
         return redirect()->route('inventory.account')->with('success', 'User berhasil di edit');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

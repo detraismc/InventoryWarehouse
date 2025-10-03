@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Warehouse;
 use App\Models\UserLog;
+use Illuminate\Support\Facades\Auth;
 
 class WarehouseController extends Controller
 {
@@ -25,10 +26,9 @@ class WarehouseController extends Controller
 
         // Store log
         UserLog::create([
-            'sender' => 'system',
-            'log_type' => 'OTHER',
-            'log'    => "Created warehouse: {$warehouse->name}",
-            'date'   => now()
+            'sender' => Auth::user()->name,
+            'log_type' => 'setup',
+            'log'    => "Created warehouse: {$warehouse->name}"
         ]);
 
         return redirect()->route('inventory.warehouse')->with('success', 'Warehouse berhasil ditambahkan');
@@ -48,10 +48,9 @@ class WarehouseController extends Controller
 
         // Store log
         UserLog::create([
-            'sender' => 'system',
-            'log_type' => 'OTHER',
-            'log'    => "Updated warehouse: {$warehouseOldName} -> {$warehouseNewName}",
-            'date'   => now()
+            'sender' => Auth::user()->name,
+            'log_type' => 'setup',
+            'log'    => "Updated warehouse: {$warehouseOldName} -> {$warehouseNewName}"
         ]);
 
         return redirect()->route('inventory.warehouse')->with('success', 'Category berhasil di edit');
@@ -60,19 +59,19 @@ class WarehouseController extends Controller
     public function destroy(string $id)
     {
         $warehouse = Warehouse::findOrFail($id);
+        $warehouseName = $warehouse->name;
 
         #Delete semua items
-        #$warehouse->getItemData()->delete();
+        $warehouse->getItem()->delete();
 
         #Delete warehouse
         $warehouse->delete();
 
         // Store log
         UserLog::create([
-            'sender' => 'system',
-            'log_type' => 'OTHER',
-            'log'    => "Deleted warehouse: {$warehouse->name}",
-            'date'   => now()
+            'sender' => Auth::user()->name,
+            'log_type' => 'setup',
+            'log'    => "Deleted warehouse: {$warehouseName}"
         ]);
 
         return redirect()->route('inventory.warehouse')->with('success', 'Warehouse berhasil didelete');

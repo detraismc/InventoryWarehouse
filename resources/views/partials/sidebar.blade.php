@@ -15,7 +15,10 @@
 
 
     @if (in_array(Auth::user()->role, ['admin', 'manager']))
-        <a href="{{ route('inventory.log') }}" class="{{ request()->routeIs('inventory.log') ? 'active' : '' }}">Log</a>
+        <a href="{{ route('inventory.log.transaction') }}"
+            class="{{ request()->routeIs('inventory.log.transaction', 'inventory.log.account', 'inventory.log.setup') ? 'active' : '' }}">
+            Log
+        </a>
     @endif
 
 

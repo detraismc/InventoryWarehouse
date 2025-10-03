@@ -7,9 +7,21 @@ use App\Models\UserLog;
 
 class LogController extends Controller
 {
-    public function index()
+    public function transaction()
     {
-        $logList = UserLog::all();
+        $logList = UserLog::where('log_type', 'transaction')->latest()->get();
+        return view('inventory.log', compact('logList'));
+    }
+
+    public function account()
+    {
+        $logList = UserLog::where('log_type', 'account')->latest()->get();
+        return view('inventory.log', compact('logList'));
+    }
+
+    public function setup()
+    {
+        $logList = UserLog::where('log_type', 'setup')->latest()->get();
         return view('inventory.log', compact('logList'));
     }
 
@@ -17,6 +29,6 @@ class LogController extends Controller
     {
         $userLog = UserLog::findOrFail($id);
         $userLog->delete();
-        return redirect()->route('inventory.log')->with('success', 'Log berhasil didelete');
+        return redirect()->route('inventory.log.transaction')->with('success', 'Log berhasil didelete');
     }
 }
