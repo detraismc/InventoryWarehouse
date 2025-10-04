@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Transaction;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+
     }
 
     /**
@@ -19,6 +22,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        try {
+            if (Schema::hasTable('transaction')) {
+                View::share('pendingTransactionsCount', Transaction::where('stage', '!=', 'completed')->count());
+            } else {
+                View::share('pendingTransactionsCount', 0);
+            }
+        } catch (\Exception $e) {
+            View::share('pendingTransactionsCount', 0);
+        }
     }
+
 }

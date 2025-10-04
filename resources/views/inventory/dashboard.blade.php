@@ -54,8 +54,9 @@
             <div class="col-md-4">
                 <div class="card shadow-sm border-0 rounded-4 h-100">
                     <div class="card-body text-center">
-                        <h6 class="text-muted">Revenue</h6>
+                        <h6 class="fw-bold">Revenue</h6>
                         <h3 class="fw-bold text-primary">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</h3>
+                        <small class="text-muted">(Last 6 Month)</small>
                     </div>
                 </div>
             </div>
@@ -64,8 +65,9 @@
             <div class="col-md-4">
                 <div class="card shadow-sm border-0 rounded-4 h-100">
                     <div class="card-body text-center">
-                        <h6 class="text-muted">Cost</h6>
+                        <h6 class="fw-bold">Cost</h6>
                         <h3 class="fw-bold text-secondary">Rp {{ number_format($totalCost, 0, ',', '.') }}</h3>
+                        <small class="text-muted">(Last 6 Month)</small>
                     </div>
                 </div>
             </div>
@@ -74,14 +76,16 @@
             <div class="col-md-4">
                 <div class="card shadow-sm border-0 rounded-4 h-100">
                     <div class="card-body text-center">
-                        <h6 class="text-muted">Profit</h6>
+                        <h6 class="fw-bold">Profit</h6>
                         <h3 class="fw-bold {{ $totalProfit < 0 ? 'text-danger' : 'text-success' }}">
                             Rp {{ number_format($totalProfit, 0, ',', '.') }}
                         </h3>
+                        <small class="text-muted">(Last 6 Month)</small>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!-- Chart -->
         <div class="card shadow-sm border-0 rounded-4 mb-4">

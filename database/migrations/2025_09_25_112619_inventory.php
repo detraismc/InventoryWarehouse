@@ -46,7 +46,7 @@ return new class extends Migration
             $table->string('entity', '100')->nullable()->default(null);
             $table->string('type', '50');
             $table->string('stage', '50');
-            $table->integer('warehouse_target')->default(-1);
+            $table->integer('warehouse_target')->nullable()->default(-1);
             $table->integer('transport_fee')->default(0);
             $table->string('notes', '255')->nullable()->default(null);
             $table->timestamps();
@@ -57,8 +57,8 @@ return new class extends Migration
             $table->integer('transaction_id');
             $table->integer('item_id');
             $table->integer('quantity')->default(0);
-            $table->integer('revenue')->default(0);
-            $table->integer('cost')->default(0);
+            $table->integer('revenue')->nullable()->default(0);
+            $table->integer('cost')->nullable()->default(0);
             $table->timestamps();
         });
 

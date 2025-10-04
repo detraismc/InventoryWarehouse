@@ -11,7 +11,14 @@
     </a>
 
     <a href="{{ route('inventory.transaction') }}"
-        class="{{ request()->routeIs('inventory.transaction') ? 'active' : '' }}">Transaction</a>
+        class="{{ request()->routeIs('inventory.transaction') ? 'active' : '' }}">
+        Transaction
+
+        @if (!empty($pendingTransactionsCount) && $pendingTransactionsCount > 0)
+            <span class="badge bg-danger ms-2">{{ $pendingTransactionsCount }}</span>
+        @endif
+    </a>
+
 
 
     @if (in_array(Auth::user()->role, ['admin', 'manager']))
