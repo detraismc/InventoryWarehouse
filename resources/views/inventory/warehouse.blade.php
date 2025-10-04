@@ -24,7 +24,7 @@
                             <td>{{ $warehouse->name }}</td>
                             <td>{{ $warehouse->description }}</td>
                             <td>{{ $warehouse->address }}</td>
-                            <td>0</td>
+                            <td>{{ $warehouse->get_item_sum_quantity ?? 0 }}</td>
                             <td class="text-center">
                                 <a href="#" class="btn btn-sm btn-custom btn-edit me-2" data-bs-toggle="modal"
                                     data-bs-target="#editWarehouseModal" data-id="{{ $warehouse->id }}"

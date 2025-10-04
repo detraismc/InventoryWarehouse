@@ -3,127 +3,96 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Item;
+use App\Models\Warehouse;
+use App\Models\Transaction;
+use App\Models\TransactionItem;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-
-
+    /**
+     * Display dashboard with key metrics, recent transactions,
+     * and financial summaries.
+     */
     public function index()
     {
-        // Counts
-        $itemsCount = \App\Models\Item::count();
-        $warehousesCount = \App\Models\Warehouse::count();
-        $transactionsCount = \App\Models\Transaction::count();
-        $lowStockCount = \App\Models\Item::whereColumn('quantity', '<=', 'reorder_level')->count();
+        /**
+         * =====================
+         * COUNTS / SUMMARY DATA
+         * =====================
+         * These are the main summary numbers displayed on the dashboard cards.
+         */
+        $itemsCount = Item::sum('quantity'); // Total quantity of all items
+        $warehousesCount = Warehouse::count(); // Total number of warehouses
+        $transactionsCount = Transaction::count(); // Total number of transactions
+        $lowStockCount = Item::whereColumn('quantity', '<=', 'reorder_level')->count(); // Items that are below reorder level
 
-        // Recent transactions
-        $recentTransactions = \App\Models\Transaction::with('getWarehouse')
-            ->latest()
-            ->take(5)
+        /**
+         * =====================
+         * RECENT TRANSACTIONS
+         * =====================
+         * Fetch the 5 most recent transactions with warehouse info.
+         */
+        $recentTransactions = Transaction::with('getWarehouse')
+            ->latest() // Order by newest first
+            ->take(5)  // Limit to 5 records
             ->get();
 
-        // Warehouses
-        $warehouses = \App\Models\Warehouse::with('getItem')->get();
-
-
-        $subQuery = \App\Models\TransactionItem::select(
-                'transaction_item.transaction_id',
-                DB::raw("DATE_FORMAT(transaction_item.created_at, '%Y-%m') as month"),
-                DB::raw("SUM(transaction_item.revenue * transaction_item.quantity) as revenue_sum"),
-                DB::raw("SUM(transaction_item.cost * transaction_item.quantity) as cost_sum")
-            )
-            ->groupBy('transaction_item.transaction_id', 'month');
-
-        $financeData = DB::table(DB::raw("({$subQuery->toSql()}) as ti"))
-            ->mergeBindings($subQuery->getQuery())
-            ->join('transaction', 'transaction.id', '=', 'ti.transaction_id')
-            ->select(
-                'ti.month',
-                // revenue only from completed transactions
-                DB::raw("SUM(CASE WHEN transaction.stage = 'completed' THEN ti.revenue_sum ELSE 0 END) as total_revenue"),
-                // cost always included (+ transport_fee)
-                DB::raw("SUM(ti.cost_sum + transaction.transport_fee) as total_cost"),
-                // profit = revenue (completed only) - cost
-                DB::raw("SUM(CASE WHEN transaction.stage = 'completed' THEN ti.revenue_sum ELSE 0 END) - SUM(ti.cost_sum + transaction.transport_fee) as total_profit")
-            )
-            ->groupBy('ti.month')
-            ->orderBy('ti.month', 'asc')
-            ->take(6)
+        /**
+         * =====================
+         * FINANCIAL DATA (Last 6 Months)
+         * =====================
+         * Aggregate revenue, cost, and profit per month.
+         * Profit is calculated as revenue minus cost.
+         */
+        $financeData = TransactionItem::selectRaw("
+                DATE_FORMAT(created_at, '%Y-%m') as month,
+                SUM(revenue * quantity) as total_revenue,
+                SUM(cost * quantity) as total_cost
+            ")
+            ->groupBy('month')      // Group data by month
+            ->orderBy('month', 'asc') // Order chronologically
+            ->take(6)               // Limit to last 6 months
             ->get();
 
-
+        // Format months for display on charts (e.g., "Jan 2025")
         $months = $financeData->pluck('month')->map(function($m) {
-            return \Carbon\Carbon::parse($m . '-01')->format('M Y');
+            return Carbon::parse($m . '-01')->format('M Y');
         });
 
+        // Extract revenue and cost data for charts
         $revenues = $financeData->pluck('total_revenue');
         $costs = $financeData->pluck('total_cost');
-        $profits = $financeData->map(function ($row) {
-            return $row->total_revenue - $row->total_cost;
+
+        // Calculate profit per month (Revenue - Cost)
+        $profits = $revenues->map(function($rev, $key) use ($costs) {
+            return $rev - $costs[$key];
         });
 
-        // Totals
+        // Calculate total revenue, cost, and profit for the last 6 months
         $totalRevenue = $revenues->sum();
         $totalCost = $costs->sum();
         $totalProfit = $profits->sum();
 
-        // Profit trends (week vs last week, month vs last month)
-        $profitChangeWeek = 0;
-        $profitChangeMonth = 0;
-
-        $thisWeekProfit = \App\Models\TransactionItem::whereBetween('created_at', [
-                now()->startOfWeek(), now()->endOfWeek()
-            ])
-            ->select(DB::raw("SUM(revenue - cost) as profit"))
-            ->value('profit');
-
-        $lastWeekProfit = \App\Models\TransactionItem::whereBetween('created_at', [
-                now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()
-            ])
-            ->select(DB::raw("SUM(revenue - cost) as profit"))
-            ->value('profit');
-
-        if ($lastWeekProfit > 0) {
-            $profitChangeWeek = round((($thisWeekProfit - $lastWeekProfit) / $lastWeekProfit) * 100, 2);
-        }
-
-        $thisMonthProfit = \App\Models\TransactionItem::whereBetween('created_at', [
-                now()->startOfMonth(), now()->endOfMonth()
-            ])
-            ->select(DB::raw("SUM(revenue - cost) as profit"))
-            ->value('profit');
-
-        $lastMonthProfit = \App\Models\TransactionItem::whereBetween('created_at', [
-                now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()
-            ])
-            ->select(DB::raw("SUM(revenue - cost) as profit"))
-            ->value('profit');
-
-        if ($lastMonthProfit > 0) {
-            $profitChangeMonth = round((($thisMonthProfit - $lastMonthProfit) / $lastMonthProfit) * 100, 2);
-        }
-
+        /**
+         * =====================
+         * RETURN VIEW
+         * =====================
+         * Pass all the variables to the dashboard Blade view.
+         */
         return view('inventory.dashboard', compact(
             'itemsCount',
             'warehousesCount',
             'transactionsCount',
             'lowStockCount',
             'recentTransactions',
-            'warehouses',
             'months',
             'revenues',
             'profits',
             'totalRevenue',
             'totalCost',
-            'totalProfit',
-            'profitChangeWeek',
-            'profitChangeMonth'
+            'totalProfit'
         ));
     }
-
-
-
-
 }
